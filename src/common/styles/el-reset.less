@@ -1,0 +1,101 @@
+// 分页样式重置
+.el-pagination {
+  button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .el-pager {
+    li {
+      padding: 0 12px;
+      font-size: 14px;
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+
+  span:not([class*=suffix]) {
+    height: 32px;
+    line-height: 32px;
+
+    .el-input__inner {
+      height: 32px;
+      line-height: 32px;
+    }
+  }
+
+  .el-pagination__jump {
+    margin-left: 5px;
+  }
+}
+
+.tool-tip {
+  line-height: 18px;
+  max-width: 600px;
+}
+
+.el-dialog__wrapper {
+  // z-index: 3000 !important;
+}
+
+// 弹窗
+.el-dialog__body {
+  border-top: 1px solid #eee;
+}
+
+.dialog-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.el-dialog__footer {
+  border-top: 1px solid #eee;
+  padding: 15px 20px;
+}
+
+// 级联选择
+.el-cascader-menu__wrap {
+  height: auto;
+}
+
+.el-cascader-node__prefix::before {
+  content: none
+}
+
+.cascader-wrap {
+  .el-form-item__content {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.el-cascader-menu {
+  min-width: 215px
+}
+
+// 表单
+.demo-form-inline {
+  display: flex;
+  justify-content: space-between;
+
+  .form-date-picker {
+    width: 245px;
+  }
+
+  .search-btn {
+    .el-form-item__content {
+      display: flex;
+      justify-content: flex-end;
+    }
+  }
+}
+
+.el-form-item__label {
+  padding: 0;
+}
+
+// 消息提醒
+.el-message {
+  z-index: 5000 !important;
+  min-width: auto;
+}
