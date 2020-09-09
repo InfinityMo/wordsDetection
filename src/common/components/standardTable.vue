@@ -90,14 +90,6 @@ export default {
       return this.pagination.total
     }
   },
-  watch: {
-    pageChange: {
-      handler (newName, oldName) {
-        console.log(newName)
-      },
-      immediate: true
-    }
-  },
   mounted () {
 
   },

@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import { modalForm, modalFormRules } from './modalFormData'
 export default {
   props: {
     modalTitle: {
@@ -105,15 +106,6 @@ export default {
       required: true,
       default: false
     },
-    modalForm: {
-      type: Object,
-      required: true,
-      default: () => { }
-    },
-    modalFormRules: {
-      type: Object,
-      default: () => { }
-    },
     addEditId: {
       type: [String, Number],
       required: true
@@ -121,7 +113,9 @@ export default {
   },
   data () {
     return {
-      parentBrandDisabled: true,
+      modalForm: JSON.parse(JSON.stringify(modalForm)),
+      modalFormRules: modalFormRules,
+      disabled: true,
       selectOption: [],
       options: [
         {
@@ -141,26 +135,25 @@ export default {
       }]
     }
   },
-  watch: {
-    'addEditId' (oldVal, newVal) {
-      if (this.addEditId) {
-        this.parentBrandDisabled = false
-        // 获取编辑数据返显
-        this.getFormData()
-      } else {
-        this.parentBrandDisabled = true
-      }
-    }
-  },
   created () {
     this._getSelectData(6).then(res => {
       this.selectOption = res
     })
+    if (this.addEditId) {
+      this.disabled = false
+      this.getFormData()
+    } else {
+      this.disabled = true
+    }
   },
   methods: {
     getFormData () {
       this.$request.post('brandUpdate', { RowGuid: this.addEditId }).then(res => {
-        debugger
+        this.modalForm = {
+          brand_name: res.data.brand_name,
+          parent_brand_guid: [res.data.parent_brand_guid],
+          brand_id: res.data.brand_id
+        }
       })
     },
     restForm (refId) {
@@ -173,9 +166,25 @@ export default {
     modalConfirm () {
       this.$refs.moadlForm.validate((valid) => {
         if (valid) {
-          this.modalCancel()
+          this.submitData()
         } else {
           return false
+        }
+      })
+    },
+    submitData () {
+      const submitParams = {
+        RowGuid: this.addEditId,
+        brand_name: this.modalForm.brand_name,
+        parent_brand_guid: this.modalForm.parent_brand_guid[0],
+        brand_id: this.modalForm.brand_id
+      }
+      this.$request.post('/brandSave', submitParams).then(res => {
+        if (res.errorCode === 1) {
+          this.$message.success('保存成功')
+          this.$emit('modalConfirm', true)
+        } else {
+          this.$message.error('保存失败')
         }
       })
     }

@@ -4,7 +4,7 @@
       <el-form class="demo-form-inline">
         <el-col :span="7">
           <el-form-item label="店铺名称：">
-            <el-cascader v-model="searchForm.row_guid"
+            <el-cascader v-model="searchForm.RowGuid"
                          placeholder="请选择店铺名称"
                          :options="selectOption"
                          filterable>
@@ -31,8 +31,7 @@
                       @tableChange="tableChange" />
     </div>
     <Dialog :modalTitle="modalTitle"
-            :modalFormRules="modalFormRules"
-            :modalForm="modalForm"
+            v-if="modalShow"
             :modalShow="modalShow"
             @modalCancel="modalCancel"
             @modalConfirm="modalConfirm" />
@@ -43,7 +42,6 @@ import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData.js'
 import Dialog from './dialog'
 import { tableSearchForm } from './searchForm'
-import { modalForm, modalFormRules } from './modalFormData'
 // 联调后删除
 import { tableData } from './data'
 export default {
@@ -52,14 +50,12 @@ export default {
   data () {
     return {
       searchForm: tableSearchForm,
+      queryFrom: { RowGuid: '' },
       columns: columnsData(this.$createElement, this),
       tableData: tableData,
-      queryFrom: { RowGuid: '' },
       selectOption: [],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
-      modalForm: modalForm,
-      modalFormRules: modalFormRules,
       addEditId: ''// 编辑时存在id，新增时id为空
     }
   },
@@ -78,15 +74,9 @@ export default {
         pageSize: this.PAGING.pageSize,
         ...this.queryFrom
       }).then(res => {
-        const resData = res.result || []
-        resData.map(item => {
-          // this.tableData.push({
-          //   RowGuid: item.RowGuid,
-          //   brand_name: item.brand_name,
-          //   parent_brand_name: item.parent_brand_name
-          // })
-        })
-        this.PAGING.total = res.total
+        const resData = res.data.result || []
+        this.tableData = resData
+        this.PAGING.total = res.data.total
       })
     },
     // 新增
@@ -103,18 +93,31 @@ export default {
     },
     // modal确认
     modalConfirm () {
-      debugger
+      this.modalShow = false
+      this.getTableData()
     },
     // moadl关闭
     modalCancel () {
       this.modalShow = false
     },
     deleteHandle (scoped) {
-      debugger
+      const { row } = scoped
+      this.$request.post('/brandDelete', {
+        RowGuid: row.RowGuid
+      }).then(res => {
+        if (res.errorCode === 1) {
+          this.$message.success('删除成功')
+          // 删除时需判断是不是最后一页
+          this._isLastPage()
+          this.getTableData()
+        } else {
+          this.$message.error('删除失败')
+        }
+      })
     },
     queryHandel () {
       this.queryFrom = {
-        // RowGuid: this.searchForm.RowGuid[0]
+        RowGuid: this.searchForm.RowGuid[0] || ''
       }
       this.getTableData()
     },
@@ -122,6 +125,7 @@ export default {
     tableChange (changeParams) {
       this.PAGING.pageSize = changeParams.pageSize
       this.PAGING.pageNum = changeParams.pageNum
+      this.getTableData()
     }
   }
 }

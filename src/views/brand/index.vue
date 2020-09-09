@@ -3,8 +3,7 @@
     <div class="search-wrap">
       <el-form class="demo-form-inline">
         <el-col :span="7">
-          <el-form-item label="品牌名称："
-                        label-width="80px">
+          <el-form-item label="品牌名称：">
             <el-cascader v-model="searchForm.RowGuid"
                          placeholder="请选择品牌名称"
                          :options="selectOption"
