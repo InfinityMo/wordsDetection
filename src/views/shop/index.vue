@@ -2,7 +2,7 @@
   <div class="page">
     <div class="search-wrap">
       <el-form class="demo-form-inline">
-        <el-col :span="7">
+        <el-col :span="9">
           <el-form-item label="店铺名称：">
             <el-cascader v-model="searchForm.RowGuid"
                          placeholder="请选择店铺名称"
@@ -31,6 +31,7 @@
                       @tableChange="tableChange" />
     </div>
     <Dialog :modalTitle="modalTitle"
+            :addEditId="addEditId"
             v-if="modalShow"
             :modalShow="modalShow"
             @modalCancel="modalCancel"
@@ -42,8 +43,7 @@ import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData.js'
 import Dialog from './dialog'
 import { tableSearchForm } from './searchForm'
-// 联调后删除
-import { tableData } from './data'
+
 export default {
   mixins: [tableMixin],
   components: { Dialog },
@@ -52,7 +52,7 @@ export default {
       searchForm: tableSearchForm,
       queryFrom: { RowGuid: '' },
       columns: columnsData(this.$createElement, this),
-      tableData: tableData,
+      tableData: [],
       selectOption: [],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
@@ -65,11 +65,11 @@ export default {
     }) // 获取下拉框数据
   },
   mounted () {
-    // this.getTableData() // 获取列表数据
+    this.getTableData() // 获取列表数据
   },
   methods: {
     getTableData () {
-      this.$request.post('/brandSelect', {
+      this.$request.post('/shopSelect', {
         pageNum: this.PAGING.pageNum,
         pageSize: this.PAGING.pageSize,
         ...this.queryFrom
@@ -102,7 +102,7 @@ export default {
     },
     deleteHandle (scoped) {
       const { row } = scoped
-      this.$request.post('/brandDelete', {
+      this.$request.post('/shopDelete', {
         RowGuid: row.RowGuid
       }).then(res => {
         if (res.errorCode === 1) {

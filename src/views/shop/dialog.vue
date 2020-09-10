@@ -12,6 +12,9 @@
                     prop="shop_name"
                     label-width="110px">
         <el-input v-model="modalForm.shop_name"
+                  placeholder="请输入店铺名称"
+                  maxlength=50
+                  :disabled="disabled"
                   autocomplete="off">
         </el-input>
       </el-form-item>
@@ -21,6 +24,8 @@
                         prop="user_id"
                         label-width="110px">
             <el-input v-model="modalForm.user_id"
+                      maxlength=20
+                      placeholder="请输入店铺user_id"
                       autocomplete="off">
             </el-input>
           </el-form-item>
@@ -30,6 +35,8 @@
                         prop="shop_id"
                         label-width="110px">
             <el-input v-model="modalForm.shop_id"
+                      maxlength=20
+                      placeholder="请输入店铺shop_id"
                       autocomplete="off">
             </el-input>
           </el-form-item>
@@ -38,11 +45,12 @@
       <div class="clearfix">
         <el-col :span="12">
           <el-form-item label="店铺类型："
-                        prop="shop_type"
+                        prop="seller_type"
                         label-width="110px">
-            <el-select v-model="modalForm.shop_type"
+            <el-select v-model="modalForm.seller_type"
+                       :disabled="disabled"
                        placeholder="请选择店铺类型">
-              <el-option v-for="item in options"
+              <el-option v-for="item in sellerType"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -55,8 +63,8 @@
                         prop="is_owner"
                         label-width="110px">
             <el-select v-model="modalForm.is_owner"
-                       placeholder="请选择店铺类型">
-              <el-option v-for="item in options"
+                       placeholder="请选择店铺归属">
+              <el-option v-for="item in shopOwner"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
@@ -69,6 +77,9 @@
                     prop="shop_url"
                     label-width="110px">
         <el-input v-model="modalForm.shop_url"
+                  @change="urlCheck"
+                  placeholder="请输入店铺链接"
+                  maxlength=100
                   autocomplete="off">
         </el-input>
       </el-form-item>
@@ -76,8 +87,12 @@
                     prop="select_brand"
                     label-width="110px">
         <el-transfer v-model="modalForm.select_brand"
+                     filterable
+                     filter-placeholder="请输入品牌名称"
+                     :filter-method="filterMethod"
                      :titles="['未选择品牌', '已选择品牌']"
-                     :data="brandArr"></el-transfer>
+                     :data="brandArr">
+        </el-transfer>
       </el-form-item>
     </el-form>
     <div slot="footer"
@@ -90,8 +105,10 @@
 </template>
 
 <script>
+import tableMixin from '@/mixins/dealTable'
 import { modalForm, modalFormRules } from './modalFormData'
 export default {
+  mixins: [tableMixin],
   props: {
     modalTitle: {
       type: String,
@@ -115,44 +132,78 @@ export default {
     return {
       modalForm: JSON.parse(JSON.stringify(modalForm)),
       modalFormRules: modalFormRules,
-      disabled: true,
+      disabled: false,
       selectOption: [],
-      options: [
+      sellerType: [
         {
-          value: '1',
-          label: '黄金糕1'
+          value: 1,
+          label: '天猫'
         }, {
-          value: '2',
-          label: '黄金糕2'
+          value: 2,
+          label: '淘宝'
         }
       ],
-      brandArr: [{
-        key: '1',
-        label: '悦诗风吟'
-      }, {
-        key: '2',
-        label: '7T'
-      }]
+      shopOwner: [
+        {
+          value: 1,
+          label: '内部'
+        }, {
+          value: 0,
+          label: '外部'
+        }
+      ],
+      brandArr: []
     }
+  },
+  watch: {
+    // 'modalForm.shop_url' (newVal, oldVal) {
+    //   console.log(newVal)
+    // }
   },
   created () {
     this._getSelectData(6).then(res => {
-      this.selectOption = res
+      res.map(item => {
+        this.brandArr.push({
+          label: item.label,
+          key: item.value
+        })
+      })
     })
     if (this.addEditId) {
-      this.disabled = false
+      this.disabled = true
       this.getFormData()
     } else {
-      this.disabled = true
+      this.disabled = false
     }
   },
   methods: {
+    urlCheck (value) {
+      // eslint-disable-next-line no-unused-vars
+      let cutIndex = 0
+      const formatVal = value.trim()
+      const hkIndex = formatVal.indexOf('.hk')
+      const comIndex = formatVal.indexOf('.com')
+      if (hkIndex !== -1) {
+        cutIndex = hkIndex + 3
+      }
+      if (comIndex !== -1) {
+        cutIndex = comIndex + 4
+      }
+      // if (comIndex === -1 && hkIndex === -1) {
+      //   this.$message.error('请输入正确的店铺地址')
+      //   return
+      // }
+      const cutStr = formatVal.substring(0, cutIndex)
+      this.modalForm.shop_url = cutStr
+    },
+    // 穿梭框搜索
+    filterMethod (query, item) {
+      return item.label.indexOf(query) > -1
+    },
     getFormData () {
-      this.$request.post('brandUpdate', { RowGuid: this.addEditId }).then(res => {
+      this.$request.post('shopUpdate', { RowGuid: this.addEditId }).then(res => {
         this.modalForm = {
-          brand_name: res.data.brand_name,
-          parent_brand_guid: [res.data.parent_brand_guid],
-          brand_id: res.data.brand_id
+          ...res.data
         }
       })
     },
@@ -175,11 +226,15 @@ export default {
     submitData () {
       const submitParams = {
         RowGuid: this.addEditId,
-        brand_name: this.modalForm.brand_name,
-        parent_brand_guid: this.modalForm.parent_brand_guid[0],
-        brand_id: this.modalForm.brand_id
+        shop_name: this.modalForm.shop_name,
+        user_id: this.modalForm.user_id,
+        shop_id: this.modalForm.shop_id,
+        seller_type: this.modalForm.seller_type,
+        is_owner: this.modalForm.is_owner,
+        shop_url: this.modalForm.shop_url,
+        select_brand: this.modalForm.select_brand.join()
       }
-      this.$request.post('/brandSave', submitParams).then(res => {
+      this.$request.post('/shopSave', submitParams).then(res => {
         if (res.errorCode === 1) {
           this.$message.success('保存成功')
           this.$emit('modalConfirm', true)

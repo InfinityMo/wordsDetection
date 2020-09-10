@@ -56,6 +56,7 @@
 // 级联选择
 .el-cascader-menu__wrap {
   height: auto;
+  max-height: 204px;
 }
 
 .el-cascader-node__prefix::before {
@@ -73,7 +74,19 @@
   min-width: 215px
 }
 
+.el-cascader__dropdown {
+  min-width: 215px;
+  max-width: 215px
+}
+
 .brand-cascader {
+  min-width: 200px;
+  max-width: 200px;
+
+  .el-cascader-menu {
+    min-width: 200px
+  }
+
   .el-cascader-menu {
     min-width: 200px
   }
