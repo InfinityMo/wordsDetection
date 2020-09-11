@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="modalTitle"
-             width="850px"
+             width="750px"
              :top="offestTop"
              :destroy-on-close="true"
              :visible.sync="modalShow"
@@ -9,9 +9,9 @@
              :rules="modalFormRules"
              ref="moadlForm">
       <el-form-item label="链接标题："
-                    prop="brand_name"
+                    prop="link_title"
                     label-width="115px">
-        <el-input v-model="modalForm.brand_name"
+        <el-input v-model="modalForm.link_title"
                   placeholder="请输入链接标题"
                   autocomplete="off">
         </el-input>
@@ -19,58 +19,90 @@
       <div class="clearfix">
         <el-col :span="12">
           <el-form-item label="售卖类型："
-                        prop="parent_brand_name"
+                        prop="seller_type"
                         label-width="115px">
-            <el-select v-model="modalForm.parent_brand_name"
+            <!-- <el-select v-model="modalForm.seller_type"
                        placeholder="请选择售卖类型">
-              <!-- <el-option v-for="item in options"
+              <el-option v-for="item in options"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
-              </el-option> -->
+              </el-option>
+            </el-select> -->
+            <el-select v-model="modalForm.seller_type"
+                       popper-class="dialog-select"
+                       :disabled="disabled"
+                       placeholder="请选择售卖类型">
+              <el-option v-for="item in sellerType"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="所属店铺："
+                        prop="shop_name"
                         label-width="115px">
-            <el-select v-model="modalForm.parent_brand_name"
+            <!-- <el-select v-model="modalForm.shop_name"
                        placeholder="请选择所属店铺">
-              <!-- <el-option v-for="item in options"
+              <el-option v-for="item in options"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
-              </el-option> -->
-            </el-select>
+              </el-option>
+            </el-select> -->
+            <el-cascader v-model="modalForm.shop_name"
+                         popper-class="brand-cascader dialog-cascader"
+                         :disabled="disabled"
+                         placeholder="请选择所属店铺"
+                         :options="shopOption"
+                         clearable
+                         filterable>
+            </el-cascader>
           </el-form-item>
         </el-col>
       </div>
       <el-form-item label="所属品牌："
                     prop="brand_name"
                     label-width="115px">
-        <el-select v-model="modalForm.parent_brand_name"
+        <!-- <el-select v-model="modalForm.brand_name"
                    placeholder="请选择所属品牌">
-          <!-- <el-option v-for="item in options"
+          <el-option v-for="item in options"
                          :key="item.value"
                          :label="item.label"
                          :value="item.value">
-              </el-option> -->
-        </el-select>
+              </el-option>
+        </el-select> -->
+        <el-cascader v-model="modalForm.brand_name"
+                     popper-class="brand-cascader dialog-cascader"
+                     :disabled="disabled"
+                     placeholder="请选择所属品牌"
+                     :options="brandOption"
+                     clearable
+                     filterable>
+        </el-cascader>
       </el-form-item>
       <el-form-item label="商品详情地址："
-                    prop="brand_name"
+                    prop="link_url"
                     label-width="115px">
-        <el-input v-model="modalForm.brand_name"
+        <el-input v-model="modalForm.link_url"
+                  :disabled="disabled"
                   placeholder="请输入商品详情地址"
                   autocomplete="off">
         </el-input>
       </el-form-item>
       <el-form-item label="所属类目："
-                    prop="parent_brand_name"
+                    prop="sycm_cate_id"
                     label-width="115px">
-        <el-cascader v-model="modalForm.parent_brand_name"
+        <el-cascader v-model="modalForm.sycm_cate_id"
+                     class="category-cascader"
+                     clearable
+                     separator=" - "
                      placeholder="请选择所属类目"
-                     :options="options"></el-cascader>
+                     popper-class="dialog-cascader"
+                     :options="category"></el-cascader>
       </el-form-item>
     </el-form>
     <div slot="footer"
@@ -83,7 +115,10 @@
 </template>
 
 <script>
+import tableMixin from '@/mixins/dealTable'
+import { modalForm, modalFormRules } from './modalFormData'
 export default {
+  mixins: [tableMixin],
   props: {
     modalTitle: {
       type: String,
@@ -98,213 +133,28 @@ export default {
       required: true,
       default: false
     },
-    modalForm: {
-      type: Object,
-      required: true,
-      default: () => { }
-    },
-    modalFormRules: {
-      type: Object,
-      default: () => { }
+    addEditId: {
+      type: [String, Number],
+      required: true
     }
   },
   data () {
     return {
-      options: [{
-        value: 'zhinan',
-        label: '指南',
-        children: [{
-          value: 'shejiyuanze',
-          label: '设计原则',
-          children: [{
-            value: 'yizhi',
-            label: '一致'
-          }, {
-            value: 'fankui',
-            label: '反馈'
-          }, {
-            value: 'xiaolv',
-            label: '效率'
-          }, {
-            value: 'kekong',
-            label: '可控'
-          }]
+      modalForm: JSON.parse(JSON.stringify(modalForm)),
+      modalFormRules: modalFormRules,
+      shopOption: [],
+      brandOption: [],
+      category: [],
+      sellerType: [
+        {
+          value: 1,
+          label: '天猫'
         }, {
-          value: 'daohang',
-          label: '导航',
-          children: [{
-            value: 'cexiangdaohang',
-            label: '侧向导航'
-          }, {
-            value: 'dingbudaohang',
-            label: '顶部导航'
-          }]
-        }]
-      }, {
-        value: 'zujian',
-        label: '组件',
-        children: [{
-          value: 'basic',
-          label: 'Basic',
-          children: [{
-            value: 'layout',
-            label: 'Layout 布局'
-          }, {
-            value: 'color',
-            label: 'Color 色彩'
-          }, {
-            value: 'typography',
-            label: 'Typography 字体'
-          }, {
-            value: 'icon',
-            label: 'Icon 图标'
-          }, {
-            value: 'button',
-            label: 'Button 按钮'
-          }]
-        }, {
-          value: 'form',
-          label: 'Form',
-          children: [{
-            value: 'radio',
-            label: 'Radio 单选框'
-          }, {
-            value: 'checkbox',
-            label: 'Checkbox 多选框'
-          }, {
-            value: 'input',
-            label: 'Input 输入框'
-          }, {
-            value: 'input-number',
-            label: 'InputNumber 计数器'
-          }, {
-            value: 'select',
-            label: 'Select 选择器'
-          }, {
-            value: 'cascader',
-            label: 'Cascader 级联选择器'
-          }, {
-            value: 'switch',
-            label: 'Switch 开关'
-          }, {
-            value: 'slider',
-            label: 'Slider 滑块'
-          }, {
-            value: 'time-picker',
-            label: 'TimePicker 时间选择器'
-          }, {
-            value: 'date-picker',
-            label: 'DatePicker 日期选择器'
-          }, {
-            value: 'datetime-picker',
-            label: 'DateTimePicker 日期时间选择器'
-          }, {
-            value: 'upload',
-            label: 'Upload 上传'
-          }, {
-            value: 'rate',
-            label: 'Rate 评分'
-          }, {
-            value: 'form',
-            label: 'Form 表单'
-          }]
-        }, {
-          value: 'data',
-          label: 'Data',
-          children: [{
-            value: 'table',
-            label: 'Table 表格'
-          }, {
-            value: 'tag',
-            label: 'Tag 标签'
-          }, {
-            value: 'progress',
-            label: 'Progress 进度条'
-          }, {
-            value: 'tree',
-            label: 'Tree 树形控件'
-          }, {
-            value: 'pagination',
-            label: 'Pagination 分页'
-          }, {
-            value: 'badge',
-            label: 'Badge 标记'
-          }]
-        }, {
-          value: 'notice',
-          label: 'Notice',
-          children: [{
-            value: 'alert',
-            label: 'Alert 警告'
-          }, {
-            value: 'loading',
-            label: 'Loading 加载'
-          }, {
-            value: 'message',
-            label: 'Message 消息提示'
-          }, {
-            value: 'message-box',
-            label: 'MessageBox 弹框'
-          }, {
-            value: 'notification',
-            label: 'Notification 通知'
-          }]
-        }, {
-          value: 'navigation',
-          label: 'Navigation',
-          children: [{
-            value: 'menu',
-            label: 'NavMenu 导航菜单'
-          }, {
-            value: 'tabs',
-            label: 'Tabs 标签页'
-          }, {
-            value: 'breadcrumb',
-            label: 'Breadcrumb 面包屑'
-          }, {
-            value: 'dropdown',
-            label: 'Dropdown 下拉菜单'
-          }, {
-            value: 'steps',
-            label: 'Steps 步骤条'
-          }]
-        }, {
-          value: 'others',
-          label: 'Others',
-          children: [{
-            value: 'dialog',
-            label: 'Dialog 对话框'
-          }, {
-            value: 'tooltip',
-            label: 'Tooltip 文字提示'
-          }, {
-            value: 'popover',
-            label: 'Popover 弹出框'
-          }, {
-            value: 'card',
-            label: 'Card 卡片'
-          }, {
-            value: 'carousel',
-            label: 'Carousel 走马灯'
-          }, {
-            value: 'collapse',
-            label: 'Collapse 折叠面板'
-          }]
-        }]
-      }, {
-        value: 'ziyuan',
-        label: '资源',
-        children: [{
-          value: 'axure',
-          label: 'Axure Components'
-        }, {
-          value: 'sketch',
-          label: 'Sketch Templates'
-        }, {
-          value: 'jiaohu',
-          label: '组件交互文档'
-        }]
-      }]
+          value: 2,
+          label: '淘宝'
+        }
+      ],
+      disabled: false
     }
   },
   watch: {
@@ -313,15 +163,38 @@ export default {
 
   },
   created () {
-
+    this.getSelects()
+    this.getCascaderData()
+    if (this.addEditId) {
+      this.disabled = true
+      this.getFormData()
+    } else {
+      this.disabled = false
+    }
   },
   mounted () {
     // debugger
 
   },
   methods: {
-    cascaderChange (value) {
+    getSelects () {
+      Promise.all([this._getSelectData(1), this._getSelectData(2)]).then(res => {
+        this.shopOption = res[0]
+        this.brandOption = res[1]
+      })
+    },
+    getCascaderData () {
+      this.$request.post('/catedropdownlist').then(res => {
+        this.category = res.data
+      })
+    },
+    getFormData () {
+      this.$request.post('linkUpdate', { RowGuid: this.addEditId }).then(res => {
+        debugger
+        // this.modalForm = {
 
+        // }
+      })
     },
     restForm (refId) {
       this.$refs[refId].resetFields()
@@ -333,9 +206,28 @@ export default {
     modalConfirm () {
       this.$refs.moadlForm.validate((valid) => {
         if (valid) {
-          this.modalCancel()
+          this.submitData()
         } else {
           return false
+        }
+      })
+    },
+    submitData () {
+      const submitParams = {
+        RowGuid: this.addEditId,
+        link_title: this.modalForm.link_title,
+        seller_type: this.modalForm.seller_type,
+        shop_name: this.modalForm.shop_name[0],
+        brand_name: this.modalForm.brand_name[0],
+        link_url: this.modalForm.link_url,
+        sycm_cate_id: this.modalForm.sycm_cate_id[this.modalForm.sycm_cate_id.length - 1]
+      }
+      this.$request.post('/linkSave', submitParams).then(res => {
+        if (res.errorCode === 1) {
+          this.$message.success('保存成功')
+          this.$emit('modalConfirm', true)
+        } else {
+          this.$message.error('保存失败')
         }
       })
     }

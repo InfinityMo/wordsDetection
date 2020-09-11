@@ -32,7 +32,10 @@
 </template>
 
 <script>
+import tableMixin from '@/mixins/dealTable'
+import { modalForm, modalFormRules } from './modalFormData'
 export default {
+  mixins: [tableMixin],
   props: {
     modalTitle: {
       type: String,
@@ -46,20 +49,13 @@ export default {
       type: Boolean,
       required: true,
       default: false
-    },
-    modalForm: {
-      type: Object,
-      required: true,
-      default: () => { }
-    },
-    modalFormRules: {
-      type: Object,
-      default: () => { }
     }
   },
   data () {
     return {
-
+      modalForm: JSON.parse(JSON.stringify(modalForm)),
+      modalFormRules: modalFormRules,
+      brandArr: []
     }
   },
   watch: {

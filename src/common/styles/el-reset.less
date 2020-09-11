@@ -35,7 +35,7 @@
 }
 
 .el-dialog__wrapper {
-  // z-index: 3000 !important;
+  z-index: 3000 !important;
 }
 
 // 弹窗
@@ -54,9 +54,23 @@
 }
 
 // 级联选择
-.el-cascader-menu__wrap {
-  height: auto;
-  max-height: 204px;
+
+
+.el-cascader-menu__list {
+  min-height: 32px;
+}
+
+.reset-casc {
+  .el-cascader-menu__wrap {
+    height: auto;
+    max-height: 204px;
+  }
+
+  .el-cascader-menu {
+    min-width: 215px;
+    max-width: 215px
+  }
+
 }
 
 .el-cascader-node__prefix::before {
@@ -70,14 +84,7 @@
   }
 }
 
-.el-cascader-menu {
-  min-width: 215px
-}
 
-.el-cascader__dropdown {
-  min-width: 215px;
-  max-width: 215px
-}
 
 .brand-cascader {
   min-width: 200px;
@@ -90,6 +97,10 @@
   .el-cascader-menu {
     min-width: 200px
   }
+}
+
+.category-cascader {
+  width: 595px;
 }
 
 // 表单
@@ -117,4 +128,12 @@
 .el-message {
   z-index: 5000 !important;
   min-width: auto;
+}
+
+.dialog-select {
+  z-index: 3100 !important;
+}
+
+.dialog-cascader {
+  z-index: 3100 !important;
 }

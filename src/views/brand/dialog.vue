@@ -23,7 +23,7 @@
                         prop="parent_brand_guid"
                         label-width="120px">
             <el-cascader v-model="modalForm.parent_brand_guid"
-                         popper-class="brand-cascader"
+                         popper-class="brand-cascader dialog-cascader"
                          :disabled="disabled"
                          placeholder="请选择主品牌"
                          :options="selectOption"

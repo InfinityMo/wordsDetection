@@ -6,8 +6,10 @@
           <el-form-item label="店铺名称：">
             <el-cascader v-model="searchForm.RowGuid"
                          placeholder="请选择店铺名称"
+                         popper-class="reset-casc"
                          :options="selectOption"
-                         filterable>
+                         filterable
+                         clearable>
             </el-cascader>
           </el-form-item>
         </el-col>

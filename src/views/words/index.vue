@@ -5,17 +5,20 @@
         <el-col :span="7">
           <el-form-item label="违禁词："
                         label-width="80px">
-            <el-cascader v-model="searchForm.brandName"
+            <el-cascader v-model="searchForm.wordGuid"
                          placeholder="请选择违禁词"
-                         :options="shopOption"
-                         filterable>
+                         popper-class="reset-casc"
+                         :options="selectOption"
+                         filterable
+                         clearable>
             </el-cascader>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item label="有效性："
                         label-width="80px">
-            <el-select v-model="searchForm.effect"
+            <el-select v-model="searchForm.valid"
+                       clearable
                        placeholder="请选择有效性">
               <el-option v-for="item in effectOptions"
                          :key="item.value"
@@ -45,8 +48,8 @@
                       @tableChange="tableChange" />
     </div>
     <Dialog :modalTitle="modalTitle"
-            :modalFormRules="modalFormRules"
-            :modalForm="modalForm"
+            :addEditId="addEditId"
+            v-if="modalShow"
             :modalShow="modalShow"
             @modalCancel="modalCancel"
             @modalConfirm="modalConfirm" />
@@ -56,18 +59,12 @@
 import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData.js'
 import Dialog from './dialog'
-import { modalForm, modalFormRules } from './modalFormData'
-// 联调后删除
-import { tableData, shopOption } from './data'
 export default {
   mixins: [tableMixin],
   components: { Dialog },
   data () {
     return {
       effectOptions: [{
-        value: -1,
-        label: '全部'
-      }, {
         value: 0,
         label: '无效'
       }, {
@@ -75,24 +72,38 @@ export default {
         label: '有效'
       }],
       searchForm: {
-        brandName: '',
-        effect: -1
+        wordGuid: '',
+        valid: ''
       },
+      queryFrom: { wordGuid: '', valid: '' },
       columns: columnsData(this.$createElement, this),
-      tableData: tableData,
-      shopOption: shopOption,
+      tableData: [],
+      selectOption: [],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
-      modalForm: modalForm,
-      modalFormRules: modalFormRules,
       addEditId: '' // 编辑时存在id，新增时id为空
     }
   },
+  created () {
+    this._getSelectData(7).then(res => {
+      this.selectOption = res
+    }) // 获取下拉框数据
+  },
   mounted () {
-    // 联调时删除
-    this.PAGING.total = this.tableData.length
+    this.getTableData()
   },
   methods: {
+    getTableData () {
+      this.$request.post('/getwordinfo', {
+        pageNum: this.PAGING.pageNum,
+        pageSize: this.PAGING.pageSize,
+        ...this.queryFrom
+      }).then(res => {
+        const resData = res.data.result || []
+        this.tableData = resData
+        this.PAGING.total = res.data.total
+      })
+    },
     // 有效性开关事件
     switchChange (scoped) {
       const newRow = this.tableData.filter((item) => {
@@ -103,14 +114,14 @@ export default {
     // 新增
     addHandle () {
       this.addEditId = ''
-      this.modalTitle = '新增品牌'
+      this.modalTitle = '新增违禁词'
       this.modalShow = true
     },
     editMoadl (scoped) {
       this.modalShow = true
       const { row } = scoped
-      this.addEditId = row.id
-      this.modalTitle = '编辑品牌'
+      this.addEditId = row.RowGuid
+      this.modalTitle = '编辑违禁词'
     },
     // modal确认
     modalConfirm () {
@@ -121,15 +132,32 @@ export default {
       this.modalShow = false
     },
     deleteHandle (scoped) {
-      debugger
+      const { row } = scoped
+      this.$request.post('/shopDelete', {
+        RowGuid: row.RowGuid
+      }).then(res => {
+        if (res.errorCode === 1) {
+          this.$message.success('删除成功')
+          // 删除时需判断是不是最后一页
+          this._isLastPage()
+          this.getTableData()
+        } else {
+          this.$message.error('删除失败')
+        }
+      })
     },
     queryHandel () {
-      console.log(this.searchForm.brandName[0])
+      this.queryFrom = {
+        wordGuid: this.searchForm.wordGuid[0] || '',
+        valid: this.searchForm.valid
+      }
+      this.getTableData()
     },
     // 表格分页的变化
     tableChange (changeParams) {
-      this.paging.pageSize = changeParams.pageSize
-      this.paging.currentPage = changeParams.currentPage
+      this.PAGING.pageSize = changeParams.pageSize
+      this.PAGING.pageNum = changeParams.pageNum
+      this.getTableData()
     }
   }
 }

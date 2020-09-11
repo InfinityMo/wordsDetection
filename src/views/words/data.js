@@ -7,7 +7,48 @@ export const tableData = [
     id: '2',
     forbid_words: '悦诗风吟2',
     effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
+  }, {
+    id: '2',
+    forbid_words: '悦诗风吟2',
+    effective: true
   }
+
 ]
 
 export const shopOption = [

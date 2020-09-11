@@ -48,6 +48,7 @@
                         prop="seller_type"
                         label-width="110px">
             <el-select v-model="modalForm.seller_type"
+                       popper-class="dialog-select"
                        :disabled="disabled"
                        placeholder="请选择店铺类型">
               <el-option v-for="item in sellerType"
@@ -63,6 +64,7 @@
                         prop="is_owner"
                         label-width="110px">
             <el-select v-model="modalForm.is_owner"
+                       popper-class="dialog-select"
                        placeholder="请选择店铺归属">
               <el-option v-for="item in shopOwner"
                          :key="item.value"
@@ -189,10 +191,11 @@ export default {
       if (comIndex !== -1) {
         cutIndex = comIndex + 4
       }
-      // if (comIndex === -1 && hkIndex === -1) {
-      //   this.$message.error('请输入正确的店铺地址')
-      //   return
-      // }
+      if (comIndex === -1 && hkIndex === -1) {
+        this.$message.error('请输入正确的店铺地址')
+        this.modalForm.shop_url = ''
+        return
+      }
       const cutStr = formatVal.substring(0, cutIndex)
       this.modalForm.shop_url = cutStr
     },

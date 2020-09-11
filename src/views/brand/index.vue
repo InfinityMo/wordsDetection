@@ -6,6 +6,7 @@
           <el-form-item label="品牌名称：">
             <el-cascader v-model="searchForm.RowGuid"
                          placeholder="请选择品牌名称"
+                         popper-class="reset-casc"
                          :options="selectOption"
                          clearable
                          filterable>
