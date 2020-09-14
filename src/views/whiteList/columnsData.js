@@ -3,16 +3,19 @@ export const columnsData = (h, $this) => [{
   title: '序号',
   width: 80
 }, {
-  dataKey: 'forbid_words',
+  dataKey: 'template_name',
   title: '模板名称'
 }, {
-  dataKey: 'effective',
+  dataKey: 'template_type',
+  title: '模板类型'
+}, {
+  dataKey: 'is_valid',
   title: '有效性',
   render: (h, scoped) => {
     return (
       <div>
         <el-switch
-          value={scoped.row.effective}
+          value={scoped.row.is_valid}
           onchange={() => $this.switchChange(scoped)}
           active-color="#409eff"
           inactive-color="#dcdfe6">

@@ -12,7 +12,7 @@ export const columnsData = (h, $this) => [{
   dataKey: 'brand_name',
   title: '品牌'
 }, {
-  dataKey: 'category_name',
+  dataKey: 'cate_name',
   title: '所属类目'
 },
 {

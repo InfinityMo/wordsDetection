@@ -118,7 +118,7 @@ export default {
     },
     offestTop: {
       type: String,
-      default: '120px'
+      default: '50px'
     },
     modalShow: {
       type: Boolean,

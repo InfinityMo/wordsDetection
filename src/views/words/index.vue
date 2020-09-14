@@ -19,6 +19,7 @@
                         label-width="80px">
             <el-select v-model="searchForm.valid"
                        clearable
+                       @clear="validClear"
                        placeholder="请选择有效性">
               <el-option v-for="item in effectOptions"
                          :key="item.value"
@@ -65,6 +66,9 @@ export default {
   data () {
     return {
       effectOptions: [{
+        value: -1,
+        label: '全部'
+      }, {
         value: 0,
         label: '无效'
       }, {
@@ -73,9 +77,9 @@ export default {
       }],
       searchForm: {
         wordGuid: '',
-        valid: ''
+        valid: -1
       },
-      queryFrom: { wordGuid: '', valid: '' },
+      queryFrom: { wordGuid: '', valid: -1 },
       columns: columnsData(this.$createElement, this),
       tableData: [],
       selectOption: [],
@@ -100,16 +104,17 @@ export default {
         ...this.queryFrom
       }).then(res => {
         const resData = res.data.result || []
+        resData.forEach((e, index) => {
+          e.valid === 1 ? resData[index].valid = true : resData[index].valid = false
+        })
         this.tableData = resData
         this.PAGING.total = res.data.total
       })
     },
-    // 有效性开关事件
-    switchChange (scoped) {
-      const newRow = this.tableData.filter((item) => {
-        return item.id === scoped.row.id
-      })[0]
-      newRow.effective = !newRow.effective
+    // 有效性清除时恢复为全部状态
+    validClear () {
+      this.searchForm.valid = -1
+      this.queryFrom.valid = -1
     },
     // 新增
     addHandle () {
@@ -120,29 +125,43 @@ export default {
     editMoadl (scoped) {
       this.modalShow = true
       const { row } = scoped
-      this.addEditId = row.RowGuid
+      this.addEditId = row.guid
       this.modalTitle = '编辑违禁词'
     },
     // modal确认
     modalConfirm () {
-      debugger
+      this.modalShow = false
+      this.getTableData()
     },
     // moadl关闭
     modalCancel () {
       this.modalShow = false
     },
-    deleteHandle (scoped) {
+    // 有效性开关事件
+    switchChange (scoped) {
+      const newRow = this.tableData.filter((item) => {
+        return item.guid === scoped.row.guid
+      })[0]
+      newRow.valid = !newRow.valid
+      // 保存有效性的更改
+      this.deleteHandle(scoped, '操作', 0)
+    },
+    deleteHandle (scoped, warnStr = '删除', requestType = 1) {
       const { row } = scoped
-      this.$request.post('/shopDelete', {
-        RowGuid: row.RowGuid
+      this.$request.post('/updateWordInfo', {
+        wordGuid: row.guid,
+        valid: row.valid ? 1 : 0,
+        delete: requestType
       }).then(res => {
         if (res.errorCode === 1) {
-          this.$message.success('删除成功')
-          // 删除时需判断是不是最后一页
-          this._isLastPage()
+          this.$message.success(`${warnStr}成功`)
+          if (requestType) {
+            // 删除时需判断是不是最后一页
+            this._isLastPage()
+          }
           this.getTableData()
         } else {
-          this.$message.error('删除失败')
+          this.$message.error(`${warnStr}失败`)
         }
       })
     },

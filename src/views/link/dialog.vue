@@ -12,6 +12,7 @@
                     prop="link_title"
                     label-width="115px">
         <el-input v-model="modalForm.link_title"
+                  maxlength="50"
                   placeholder="请输入链接标题"
                   autocomplete="off">
         </el-input>
@@ -21,14 +22,6 @@
           <el-form-item label="售卖类型："
                         prop="seller_type"
                         label-width="115px">
-            <!-- <el-select v-model="modalForm.seller_type"
-                       placeholder="请选择售卖类型">
-              <el-option v-for="item in options"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-select> -->
             <el-select v-model="modalForm.seller_type"
                        popper-class="dialog-select"
                        :disabled="disabled"
@@ -45,14 +38,6 @@
           <el-form-item label="所属店铺："
                         prop="shop_name"
                         label-width="115px">
-            <!-- <el-select v-model="modalForm.shop_name"
-                       placeholder="请选择所属店铺">
-              <el-option v-for="item in options"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-            </el-select> -->
             <el-cascader v-model="modalForm.shop_name"
                          popper-class="brand-cascader dialog-cascader"
                          :disabled="disabled"
@@ -67,14 +52,6 @@
       <el-form-item label="所属品牌："
                     prop="brand_name"
                     label-width="115px">
-        <!-- <el-select v-model="modalForm.brand_name"
-                   placeholder="请选择所属品牌">
-          <el-option v-for="item in options"
-                         :key="item.value"
-                         :label="item.label"
-                         :value="item.value">
-              </el-option>
-        </el-select> -->
         <el-cascader v-model="modalForm.brand_name"
                      popper-class="brand-cascader dialog-cascader"
                      :disabled="disabled"
@@ -89,6 +66,7 @@
                     label-width="115px">
         <el-input v-model="modalForm.link_url"
                   :disabled="disabled"
+                  maxlength="500"
                   placeholder="请输入商品详情地址"
                   autocomplete="off">
         </el-input>
@@ -126,7 +104,7 @@ export default {
     },
     offestTop: {
       type: String,
-      default: '120px'
+      default: '50px'
     },
     modalShow: {
       type: Boolean,
@@ -190,10 +168,11 @@ export default {
     },
     getFormData () {
       this.$request.post('linkUpdate', { RowGuid: this.addEditId }).then(res => {
-        debugger
-        // this.modalForm = {
-
-        // }
+        this.modalForm = {
+          ...res.data,
+          shop_name: [res.data.shop_name],
+          brand_name: [res.data.brand_name]
+        }
       })
     },
     restForm (refId) {

@@ -6,8 +6,10 @@
           <el-form-item label="店铺名称："
                         label-width="80px">
             <el-cascader v-model="searchForm.brandName"
+                         popper-class="reset-casc"
                          placeholder="请选择店铺"
                          :options="shopOption"
+                         clearable
                          filterable>
             </el-cascader>
           </el-form-item>
@@ -51,7 +53,7 @@ import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData.js'
 import { modalForm, modalFormRules } from './modalFormData'
 // 联调后删除
-import { tableData, shopOption } from './data'
+import { tableData } from './data'
 export default {
   mixins: [tableMixin],
   data () {
@@ -86,13 +88,18 @@ export default {
       searchForm: { brandName: '' },
       columns: columnsData(this.$createElement, this),
       tableData: tableData,
-      shopOption: shopOption,
+      shopOption: [],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
       modalForm: modalForm,
       modalFormRules: modalFormRules,
       addEditId: '' // 编辑时存在id，新增时id为空
     }
+  },
+  created () {
+    this._getSelectData(1).then(res => {
+      this.shopOption = res
+    })
   },
   mounted () {
     // 联调时删除

@@ -9,6 +9,7 @@
                          placeholder="请选择店铺名称"
                          popper-class="reset-casc"
                          :options="shopOption"
+                         clearable
                          filterable>
             </el-cascader>
           </el-form-item>
@@ -20,6 +21,7 @@
                          placeholder="请选择链接标题"
                          popper-class="reset-casc"
                          :options="linkOption"
+                         clearable
                          filterable>
             </el-cascader>
           </el-form-item>
@@ -31,6 +33,7 @@
                          placeholder="请选择品牌名称"
                          popper-class="reset-casc"
                          :options="brandOption"
+                         clearable
                          filterable>
             </el-cascader>
           </el-form-item>

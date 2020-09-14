@@ -22,7 +22,7 @@ export const modalFormRules = {
   ],
   link_url: [
     { required: true, message: '请输入商品详情地址', trigger: 'blur' },
-    { pattern: /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/, message: '请填写正确的商品链接', trigger: 'blur' }
+    { pattern: /(?:item|detail).(?:tmall|taobao).(?:com|hk).+id=(\d+)/, message: '请填写正确的商品链接', trigger: 'blur' }
   ],
   sycm_cate_id: [
     { required: true, message: '请选择所属类目', trigger: 'change' }
