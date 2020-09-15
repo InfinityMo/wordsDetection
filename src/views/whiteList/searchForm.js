@@ -1,5 +1,5 @@
 export const tableSearchForm = {
-  shop_guid: '',
-  link_row_guid: '',
-  brand_guid: ''
+  template_name: '', // 模板名称
+  template_type: '', // 模板类型
+  is_valid: -1// 有效性
 }

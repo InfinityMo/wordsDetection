@@ -22,14 +22,35 @@
           <el-form-item label="主品牌："
                         prop="parent_brand_guid"
                         label-width="120px">
-            <el-cascader v-model="modalForm.parent_brand_guid"
+            <!-- <el-cascader v-model="modalForm.parent_brand_guid"
                          popper-class="brand-cascader dialog-cascader"
                          :disabled="disabled"
                          placeholder="请选择主品牌"
                          :options="selectOption"
                          clearable
                          filterable>
-            </el-cascader>
+            </el-cascader> -->
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="tipContent ? false:true"
+                        :content="tipContent"
+                        placement="top-start">
+              <el-cascader v-model="modalForm.parent_brand_guid"
+                           placeholder="请选择主品牌"
+                           popper-class="brand-cascader dialog-cascader"
+                           :disabled="disabled"
+                           :options="selectOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="right">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -79,6 +100,7 @@ export default {
   },
   data () {
     return {
+      tipContent: '',
       disabled: true,
       selectOption: [],
       copySelectOption: [],
@@ -95,6 +117,13 @@ export default {
     //     this.disabled = true
     //   }
     // },
+    'modalForm.parent_brand_guid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.tipContent = this.selectOption.filter(item => item.value === this.modalForm.parent_brand_guid[0])[0].label
+      } else {
+        this.tipContent = ''
+      }
+    },
     'modalForm.brand_name' (newVal, oldVal) {
       if (!this.addEditId && !newVal) {
         this.disabled = true
@@ -133,6 +162,8 @@ export default {
             label: value
           })
           this.disabled = false
+        } else {
+          this.modalForm.parent_brand_guid = ''
         }
       }
     },

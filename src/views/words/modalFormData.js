@@ -8,6 +8,6 @@ export const modalFormRules = {
     { required: true, message: '请输入违禁词', trigger: 'blur' }
   ],
   templateGuidList: [
-    { required: true, message: '请选择违禁词', trigger: 'change' }
+    { required: true, message: '请选择违禁词', trigger: 'blur' }
   ]
 }

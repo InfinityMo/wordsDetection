@@ -94,6 +94,13 @@
                      :filter-method="filterMethod"
                      :titles="['未选择品牌', '已选择品牌']"
                      :data="brandArr">
+          <span slot-scope="{ option }">
+            <el-tooltip effect="dark"
+                        :content="option.label"
+                        placement="right">
+              <span>{{option.label}}</span>
+            </el-tooltip>
+          </span>
         </el-transfer>
       </el-form-item>
     </el-form>

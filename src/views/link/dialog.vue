@@ -38,28 +38,70 @@
           <el-form-item label="所属店铺："
                         prop="shop_name"
                         label-width="115px">
-            <el-cascader v-model="modalForm.shop_name"
+            <!-- <el-cascader v-model="modalForm.shop_name"
                          popper-class="brand-cascader dialog-cascader"
                          :disabled="disabled"
                          placeholder="请选择所属店铺"
                          :options="shopOption"
                          clearable
                          filterable>
-            </el-cascader>
+            </el-cascader> -->
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="shopTipContent ? false:true"
+                        :content="shopTipContent"
+                        placement="top-start">
+              <el-cascader v-model="modalForm.shop_name"
+                           placeholder="请选择所属店铺"
+                           popper-class="brand-cascader dialog-cascader"
+                           :disabled="disabled"
+                           :options="shopOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="right">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
       </div>
       <el-form-item label="所属品牌："
                     prop="brand_name"
                     label-width="115px">
-        <el-cascader v-model="modalForm.brand_name"
+        <!-- <el-cascader v-model="modalForm.brand_name"
                      popper-class="brand-cascader dialog-cascader"
                      :disabled="disabled"
                      placeholder="请选择所属品牌"
                      :options="brandOption"
                      clearable
                      filterable>
-        </el-cascader>
+        </el-cascader> -->
+        <el-tooltip class="tooltip-reset"
+                    effect="dark"
+                    :disabled="brandTipContent ? false:true"
+                    :content="brandTipContent"
+                    placement="top-start">
+          <el-cascader v-model="modalForm.brand_name"
+                       placeholder="请选择所属店铺"
+                       popper-class="brand-cascader dialog-cascader"
+                       :disabled="disabled"
+                       :options="brandOption"
+                       filterable
+                       clearable>
+            <span slot-scope="{ data }">
+              <el-tooltip effect="dark"
+                          :content="data.label"
+                          placement="right">
+                <span>{{data.label}}</span>
+              </el-tooltip>
+            </span>
+          </el-cascader>
+        </el-tooltip>
       </el-form-item>
       <el-form-item label="商品详情地址："
                     prop="link_url"
@@ -118,6 +160,8 @@ export default {
   },
   data () {
     return {
+      shopTipContent: '',
+      brandTipContent: '',
       modalForm: JSON.parse(JSON.stringify(modalForm)),
       modalFormRules: modalFormRules,
       shopOption: [],
@@ -136,6 +180,20 @@ export default {
     }
   },
   watch: {
+    'modalForm.shop_name' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.shopTipContent = this.shopOption.filter(item => item.value === this.modalForm.shop_name[0])[0].label
+      } else {
+        this.shopTipContent = ''
+      }
+    },
+    'modalForm.brand_name' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.brandTipContent = this.brandOption.filter(item => item.value === this.modalForm.brand_name[0])[0].label
+      } else {
+        this.brandTipContent = ''
+      }
+    }
   },
   computed: {
 

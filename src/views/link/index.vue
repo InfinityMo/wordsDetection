@@ -5,37 +5,97 @@
         <el-col :span="7">
           <el-form-item label="店铺名称："
                         label-width="80px">
-            <el-cascader v-model="searchForm.shop_guid"
+            <!-- <el-cascader v-model="searchForm.shop_guid"
                          placeholder="请选择店铺名称"
                          popper-class="reset-casc"
                          :options="shopOption"
                          clearable
                          filterable>
-            </el-cascader>
+            </el-cascader> -->
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="shopTipContent ? false:true"
+                        :content="shopTipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.shop_guid"
+                           placeholder="请选择店铺名称"
+                           popper-class="reset-casc"
+                           :options="shopOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="right">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item label="链接标题："
                         label-width="80px">
-            <el-cascader v-model="searchForm.link_row_guid"
+            <!-- <el-cascader v-model="searchForm.link_row_guid"
                          placeholder="请选择链接标题"
                          popper-class="reset-casc"
                          :options="linkOption"
                          clearable
                          filterable>
-            </el-cascader>
+            </el-cascader> -->
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="linkTipContent ? false:true"
+                        :content="linkTipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.link_row_guid"
+                           placeholder="请选择链接标题"
+                           popper-class="reset-casc"
+                           :options="linkOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="right">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item label="品牌名称："
                         label-width="80px">
-            <el-cascader v-model="searchForm.brand_guid"
+            <!-- <el-cascader v-model="searchForm.brand_guid"
                          placeholder="请选择品牌名称"
                          popper-class="reset-casc"
                          :options="brandOption"
                          clearable
                          filterable>
-            </el-cascader>
+            </el-cascader> -->
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="brandTipContent ? false:true"
+                        :content="brandTipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.brand_guid"
+                           placeholder="请选择品牌名称"
+                           popper-class="reset-casc"
+                           :options="brandOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="right">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="3">
@@ -76,7 +136,10 @@ export default {
   components: { Dialog },
   data () {
     return {
-      searchForm: tableSearchForm,
+      shopTipContent: '',
+      linkTipContent: '',
+      brandTipContent: '',
+      searchForm: JSON.parse(JSON.stringify(tableSearchForm)),
       queryFrom: { shop_guid: '', link_row_guid: '', brand_guid: '' },
       columns: columnsData(this.$createElement, this),
       tableData: [],
@@ -88,6 +151,32 @@ export default {
       modalForm: modalForm,
       modalFormRules: modalFormRules,
       addEditId: '' // 编辑时存在id，新增时id为空
+    }
+  },
+  watch: {
+    // 店铺名称
+    'searchForm.shop_guid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.shopTipContent = this.shopOption.filter(item => item.value === this.searchForm.shop_guid[0])[0].label
+      } else {
+        this.shopTipContent = ''
+      }
+    },
+    // 链接标题
+    'searchForm.link_row_guid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.linkTipContent = this.linkOption.filter(item => item.value === this.searchForm.link_row_guid[0])[0].label
+      } else {
+        this.linkTipContent = ''
+      }
+    },
+    // 品牌名称
+    'searchForm.brand_guid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.brandTipContent = this.brandOption.filter(item => item.value === this.searchForm.brand_guid[0])[0].label
+      } else {
+        this.brandTipContent = ''
+      }
     }
   },
   created () {

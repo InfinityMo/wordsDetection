@@ -12,7 +12,7 @@ const mixins = {
   },
   methods: {
     // 公共获取下拉框接口，
-    // type：1、店铺 2、品牌 3、链接 4、模板名称 5、模板类型 6、主品牌 7、违禁词
+    // type：1、店铺 2、品牌 3、链接 4、模板名称 5、模板类型 6、主品牌 7、违禁词 8、有效的违禁词
     _getSelectData (type) {
       const option = []
       return new Promise((resolve, reject) => {

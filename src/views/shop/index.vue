@@ -1,16 +1,30 @@
 <template>
   <div class="page">
     <div class="search-wrap">
-      <el-form class="demo-form-inline">
+      <el-form class="demo-form-inline"
+               ref="searchForm">
         <el-col :span="9">
           <el-form-item label="店铺名称：">
-            <el-cascader v-model="searchForm.RowGuid"
-                         placeholder="请选择店铺名称"
-                         popper-class="reset-casc"
-                         :options="selectOption"
-                         filterable
-                         clearable>
-            </el-cascader>
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="tipContent ? false:true"
+                        :content="tipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.RowGuid"
+                           placeholder="请选择店铺名称"
+                           popper-class="reset-casc"
+                           :options="selectOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="right">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="3">
@@ -51,7 +65,8 @@ export default {
   components: { Dialog },
   data () {
     return {
-      searchForm: tableSearchForm,
+      tipContent: '',
+      searchForm: JSON.parse(JSON.stringify(tableSearchForm)),
       queryFrom: { RowGuid: '' },
       columns: columnsData(this.$createElement, this),
       tableData: [],
@@ -59,6 +74,15 @@ export default {
       modalTitle: '', // 弹窗的名称
       modalShow: false,
       addEditId: ''// 编辑时存在id，新增时id为空
+    }
+  },
+  watch: {
+    'searchForm.RowGuid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.tipContent = this.selectOption.filter(item => item.value === this.searchForm.RowGuid[0])[0].label
+      } else {
+        this.tipContent = ''
+      }
     }
   },
   created () {

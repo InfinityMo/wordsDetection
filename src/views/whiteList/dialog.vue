@@ -46,14 +46,36 @@
         <el-form-item label="店铺名称："
                       prop="shop_name"
                       label-width="115px">
-          <el-cascader v-model="modalForm.shop_name"
+          <!-- <el-cascader v-model="modalForm.shop_name"
                        popper-class="brand-cascader dialog-cascader"
                        :disabled="disabled"
                        placeholder="请选择店铺名称"
+                       :props="{ multiple: true }"
                        :options="shopOption"
                        clearable
                        filterable>
-          </el-cascader>
+          </el-cascader> -->
+          <el-tooltip class="tooltip-reset"
+                      effect="dark"
+                      :disabled="customTipContent ? false:true"
+                      :content="customTipContent"
+                      placement="top-start">
+            <el-cascader v-model="modalForm.shop_list"
+                         placeholder="请选择所属店铺"
+                         popper-class="brand-cascader dialog-cascader"
+                         :props="{ multiple: true }"
+                         :options="shopOption"
+                         filterable
+                         clearable>
+              <span slot-scope="{ data }">
+                <el-tooltip effect="dark"
+                            :content="data.label"
+                            placement="right">
+                  <span>{{data.label}}</span>
+                </el-tooltip>
+              </span>
+            </el-cascader>
+          </el-tooltip>
         </el-form-item>
         <el-form-item label="链接："
                       prop="select_brand"
@@ -64,6 +86,13 @@
                        :filter-method="filterMethod"
                        :titles="['未选择链接', '已选择链接']"
                        :data="wordsArr">
+            <span slot-scope="{ option }">
+              <el-tooltip effect="dark"
+                          :content="option.label"
+                          placement="right">
+                <span>{{option.label}}</span>
+              </el-tooltip>
+            </span>
           </el-transfer>
         </el-form-item>
       </template>
@@ -102,6 +131,13 @@
                        :filter-method="filterMethod"
                        :titles="['未选择违禁词', '已选择违禁词']"
                        :data="wordsArr">
+            <span slot-scope="{ option }">
+              <el-tooltip effect="dark"
+                          :content="option.label"
+                          placement="right">
+                <span>{{option.label}}</span>
+              </el-tooltip>
+            </span>
           </el-transfer>
         </el-form-item>
       </template>
@@ -124,6 +160,13 @@
                        :filter-method="filterMethod"
                        :titles="['未选择违禁词', '已选择违禁词']"
                        :data="wordsArr">
+            <span slot-scope="{ option }">
+              <el-tooltip effect="dark"
+                          :content="option.label"
+                          placement="right">
+                <span>{{option.label}}</span>
+              </el-tooltip>
+            </span>
           </el-transfer>
         </el-form-item>
       </template>
@@ -139,7 +182,7 @@
 
 <script>
 import tableMixin from '@/mixins/dealTable'
-import { modalForm, modalFormRules } from './modalFormData'
+import { customModalForm, customModalFormRules } from './modalFormData'
 export default {
   mixins: [tableMixin],
   props: {
@@ -163,8 +206,9 @@ export default {
   },
   data () {
     return {
-      modalForm: JSON.parse(JSON.stringify(modalForm)),
-      modalFormRules: modalFormRules,
+      customTipContent: '',
+      modalForm: JSON.parse(JSON.stringify(customModalForm)),
+      modalFormRules: customModalFormRules,
       wordsArr: [],
       shopOption: [],
       templateOptions: [{
@@ -181,6 +225,13 @@ export default {
     }
   },
   watch: {
+    'modalForm.shop_list' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.customTipContent = this.shopOption.filter(item => item.value === this.modalForm.shop_list[0])[0].label
+      } else {
+        this.customTipContent = ''
+      }
+    }
   },
   computed: {
 
@@ -194,6 +245,7 @@ export default {
       this.disabled = false
     }
   },
+
   mounted () {
     // debugger
 
