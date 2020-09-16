@@ -55,27 +55,22 @@
                        clearable
                        filterable>
           </el-cascader> -->
-          <el-tooltip class="tooltip-reset"
-                      effect="dark"
-                      :disabled="customTipContent ? false:true"
-                      :content="customTipContent"
-                      placement="top-start">
-            <el-cascader v-model="modalForm.shop_list"
-                         placeholder="请选择所属店铺"
-                         popper-class="brand-cascader dialog-cascader"
-                         :props="{ multiple: true }"
-                         :options="shopOption"
-                         filterable
-                         clearable>
-              <span slot-scope="{ data }">
-                <el-tooltip effect="dark"
-                            :content="data.label"
-                            placement="right">
-                  <span>{{data.label}}</span>
-                </el-tooltip>
-              </span>
-            </el-cascader>
-          </el-tooltip>
+          <el-cascader v-model="modalForm.shop_list"
+                       placeholder="请选择所属店铺"
+                       popper-class="brand-cascader dialog-cascader"
+                       :props="{ multiple: true }"
+                       :options="shopOption"
+                       filterable
+                       clearable>
+            <span slot-scope="{ data }">
+              <el-tooltip effect="dark"
+                          :content="data.label"
+                          placement="right">
+                <span>{{data.label}}</span>
+              </el-tooltip>
+            </span>
+          </el-cascader>
+
         </el-form-item>
         <el-form-item label="链接："
                       prop="select_brand"
@@ -206,7 +201,6 @@ export default {
   },
   data () {
     return {
-      customTipContent: '',
       modalForm: JSON.parse(JSON.stringify(customModalForm)),
       modalFormRules: customModalFormRules,
       wordsArr: [],
@@ -225,13 +219,13 @@ export default {
     }
   },
   watch: {
-    'modalForm.shop_list' (newVal, oldVal) {
-      if (newVal.length && newVal.length > 0) {
-        this.customTipContent = this.shopOption.filter(item => item.value === this.modalForm.shop_list[0])[0].label
-      } else {
-        this.customTipContent = ''
-      }
-    }
+    // 'modalForm.shop_list' (newVal, oldVal) {
+    //   if (newVal.length && newVal.length > 0) {
+    //     this.customTipContent = this.shopOption.filter(item => item.value === this.modalForm.shop_list[0])[0].label
+    //   } else {
+    //     this.customTipContent = ''
+    //   }
+    // }
   },
   computed: {
 

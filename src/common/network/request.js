@@ -6,10 +6,11 @@ import axios from 'axios'
 import { stringify } from 'qs'
 import store from '@/store'
 import { Message } from 'element-ui'
+const { VUE_APP_API } = process.env
 // import router from '@/router'
 // 创建axios实例，设置超时时间为7S
 const instance = axios.create({
-  baseURL: process.env.VUE_APP_API,
+  baseURL: VUE_APP_API,
   timeout: 7000
 })
 // instance.defaults.withCredentials = true // 配置跨域，需要跨域时将此配置加上，同时需要后端配合开放跨域

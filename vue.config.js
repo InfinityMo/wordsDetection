@@ -20,7 +20,7 @@ module.exports = {
         // target: 'http://172.165.206.60:8000', // Leone
         target: 'http://172.165.206.134:8000',
         pathRewrite: {
-          '^/api': process.env.VUE_APP_API
+          '^/api': ''
         },
         changeOrigin: true,
         logLevel: 'debug'
