@@ -60,6 +60,7 @@
 import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData.js'
 import Dialog from './dialog'
+import { tableSearchForm } from './searchForm'
 export default {
   mixins: [tableMixin],
   components: { Dialog },
@@ -75,10 +76,7 @@ export default {
         value: 1,
         label: '有效'
       }],
-      searchForm: {
-        wordGuid: '',
-        valid: -1
-      },
+      searchForm: JSON.parse(JSON.stringify(tableSearchForm)),
       queryFrom: { wordGuid: '', valid: -1 },
       columns: columnsData(this.$createElement, this),
       tableData: [],

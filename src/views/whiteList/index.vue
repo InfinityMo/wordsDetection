@@ -1,23 +1,39 @@
 <template>
   <div class="page">
     <div class="search-wrap">
-      <el-form class="">
+      <el-form>
         <div class="clearfix">
           <el-col :span="7">
             <el-form-item label="模板名称："
                           label-width="80px">
-              <el-cascader v-model="searchForm.template_name"
-                           placeholder="请选择模板名称"
-                           popper-class="reset-casc"
-                           :options="tempalteOption"
-                           filterable>
-              </el-cascader>
+              <el-tooltip class="tooltip-reset"
+                          effect="dark"
+                          :disabled="templateTipContent ? false:true"
+                          :content="templateTipContent"
+                          placement="top-start">
+                <el-cascader v-model="searchForm.template_guid"
+                             placeholder="请选择模板名称"
+                             popper-class="reset-casc"
+                             :options="tempalteOption"
+                             filterable
+                             clearable>
+                  <span slot-scope="{ data }">
+                    <el-tooltip effect="dark"
+                                :content="data.label"
+                                placement="right">
+                      <span>{{data.label}}</span>
+                    </el-tooltip>
+                  </span>
+                </el-cascader>
+              </el-tooltip>
             </el-form-item>
           </el-col>
           <el-col :span="7">
             <el-form-item label="有效性："
                           label-width="80px">
               <el-select v-model="searchForm.is_valid"
+                         clearable
+                         @clear="validClear"
                          placeholder="请选择有效性">
                 <el-option v-for="item in effectOption"
                            :key="item.value"
@@ -100,16 +116,16 @@
 import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData'
 import Dialog from './dialog'
-import { modalForm, modalFormRules } from './modalFormData'
 import { tableSearchForm } from './searchForm'
 export default {
   mixins: [tableMixin],
   components: { Dialog },
   data () {
     return {
+      templateTipContent: '',
       shopTipContent: '',
-      searchForm: tableSearchForm,
-      queryFrom: { template_name: '', template_type: '', is_valid: -1 },
+      searchForm: JSON.parse(JSON.stringify(tableSearchForm)),
+      queryFrom: { template_guid: '', template_type: '', is_valid: -1, shop_guid: '' },
       columns: columnsData(this.$createElement, this),
       tableData: [],
       tempalteOption: [],
@@ -136,12 +152,18 @@ export default {
       }],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
-      modalForm: modalForm,
-      modalFormRules: modalFormRules,
       addEditId: '' // 编辑时存在id，新增时id为空
     }
   },
   watch: {
+    // 模板类型
+    'searchForm.template_guid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.templateTipContent = this.tempalteOption.filter(item => item.value === this.searchForm.template_guid[0])[0].label
+      } else {
+        this.templateTipContent = ''
+      }
+    },
     // 店铺名称
     'searchForm.shop_guid' (newVal, oldVal) {
       if (newVal.length && newVal.length > 0) {
@@ -159,17 +181,21 @@ export default {
   },
   methods: {
     getSelects () {
-      Promise.all([this._getSelectData(1)]).then(res => {
+      Promise.all([this._getSelectData(1), this._getSelectData(4)]).then(res => {
         this.shopOption = res[0]
+        this.tempalteOption = res[1]
       })
     },
     getTableData () {
-      this.$request.post('/linkSelect', {
+      this.$request.post('/templateSelect', {
         pageNum: this.PAGING.pageNum,
         pageSize: this.PAGING.pageSize,
         ...this.queryFrom
       }).then(res => {
         const resData = res.data.result || []
+        resData.forEach((e, index) => {
+          e.is_valid === 1 ? resData[index].is_valid = true : resData[index].is_valid = false
+        })
         this.tableData = resData
         this.PAGING.total = res.data.total
       })
@@ -183,7 +209,7 @@ export default {
     editMoadl (scoped) {
       this.modalShow = true
       const { row } = scoped
-      this.addEditId = row.RowGuid
+      this.addEditId = row.template_guid
       this.modalTitle = '编辑白名单模板'
     },
     // modal确认
@@ -195,10 +221,29 @@ export default {
     modalCancel () {
       this.modalShow = false
     },
+    switchChange (scoped) {
+      const { row } = scoped
+      const newRow = this.tableData.filter((item) => {
+        return item.template_guid === row.template_guid
+      })[0]
+      newRow.is_valid = !newRow.is_valid
+      this.$request.post('/templateValid', {
+        template_guid: row.template_guid,
+        is_valid: row.is_valid ? 1 : 0
+      }).then(res => {
+        if (res.errorCode === 1) {
+          this.$message.success('操作成功')
+
+          this.getTableData()
+        } else {
+          this.$message.error('操作失败')
+        }
+      })
+    },
     deleteHandle (scoped) {
       const { row } = scoped
       this.$request.post('/linkDelete', {
-        RowGuid: row.RowGuid
+        template_guid: row.template_guid
       }).then(res => {
         if (res.errorCode === 1) {
           this.$message.success('删除成功')
@@ -209,6 +254,11 @@ export default {
           this.$message.error('删除失败')
         }
       })
+    },
+    // 有效性清除时恢复为全部状态
+    validClear () {
+      this.searchForm.is_valid = -1
+      this.queryFrom.is_valid = -1
     },
     queryHandel () {
       this.queryFrom = {

@@ -6,178 +6,94 @@
              :visible.sync="modalShow"
              :before-close="modalCancel">
     <el-form :model="modalForm"
+             v-if="!isNext"
              :rules="modalFormRules"
              ref="moadlForm">
-      <el-form-item label="模板类型："
-                    prop="template_type"
+      <el-form-item label="模板名称："
+                    prop="template_name"
                     label-width="115px">
-        <el-select v-model="modalForm.template_type"
-                   popper-class="dialog-select"
-                   placeholder="请选择模板类型">
-          <el-option v-for="item in templateOptions"
-                     :key="item.value"
-                     :label="item.label"
-                     :value="item.value">
-          </el-option>
-        </el-select>
+        <el-input v-model="modalForm.template_name"
+                  placeholder="请输入模板名称"
+                  maxlength=50
+                  autocomplete="off">
+        </el-input>
       </el-form-item>
-      <!-- 自定义模板 -->
-      <template v-if="modalForm.template_type===0">
-        <el-form-item label="模板名称："
-                      prop="brand_name"
-                      label-width="115px">
-          <el-input v-model="modalForm.brand_name"
-                    placeholder="请输入模板名称"
-                    maxlength=50
-                    autocomplete="off">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="违禁词："
-                      prop="select_brand"
-                      label-width="110px">
-          <el-transfer v-model="modalForm.select_brand"
-                       filterable
-                       filter-placeholder="请输入违禁词"
-                       :filter-method="filterMethod"
-                       :titles="['未选择违禁词', '已选择违禁词']"
-                       :data="wordsArr">
-          </el-transfer>
-        </el-form-item>
-        <el-form-item label="店铺名称："
-                      prop="shop_name"
-                      label-width="115px">
-          <!-- <el-cascader v-model="modalForm.shop_name"
-                       popper-class="brand-cascader dialog-cascader"
-                       :disabled="disabled"
-                       placeholder="请选择店铺名称"
-                       :props="{ multiple: true }"
-                       :options="shopOption"
-                       clearable
-                       filterable>
-          </el-cascader> -->
-          <el-cascader v-model="modalForm.shop_list"
-                       placeholder="请选择所属店铺"
-                       popper-class="brand-cascader dialog-cascader"
-                       :props="{ multiple: true }"
-                       :options="shopOption"
-                       filterable
-                       clearable>
-            <span slot-scope="{ data }">
-              <el-tooltip effect="dark"
-                          :content="data.label"
-                          placement="right">
-                <span>{{data.label}}</span>
-              </el-tooltip>
-            </span>
-          </el-cascader>
-
-        </el-form-item>
-        <el-form-item label="链接："
-                      prop="select_brand"
-                      label-width="110px">
-          <el-transfer v-model="modalForm.select_brand"
-                       filterable
-                       filter-placeholder="请输入链接"
-                       :filter-method="filterMethod"
-                       :titles="['未选择链接', '已选择链接']"
-                       :data="wordsArr">
-            <span slot-scope="{ option }">
-              <el-tooltip effect="dark"
-                          :content="option.label"
-                          placement="right">
-                <span>{{option.label}}</span>
-              </el-tooltip>
-            </span>
-          </el-transfer>
-        </el-form-item>
-      </template>
-      <!-- 链接模板 -->
-      <template v-if="modalForm.template_type===1">
-        <el-form-item label="店铺名称："
-                      prop="shop_name"
-                      label-width="115px">
-          <el-cascader v-model="modalForm.shop_name"
-                       popper-class="brand-cascader dialog-cascader"
-                       :disabled="disabled"
-                       placeholder="请选择店铺名称"
-                       :options="shopOption"
-                       clearable
-                       filterable>
-          </el-cascader>
-        </el-form-item>
-        <el-form-item label="模板/链接名称："
-                      prop="shop_name"
-                      label-width="115px">
-          <el-cascader v-model="modalForm.shop_name"
-                       popper-class="brand-cascader dialog-cascader"
-                       :disabled="disabled"
-                       placeholder="请选择模板/链接名称"
-                       :options="shopOption"
-                       clearable
-                       filterable>
-          </el-cascader>
-        </el-form-item>
-        <el-form-item label="违禁词："
-                      prop="select_brand"
-                      label-width="110px">
-          <el-transfer v-model="modalForm.select_brand"
-                       filterable
-                       filter-placeholder="请输入违禁词"
-                       :filter-method="filterMethod"
-                       :titles="['未选择违禁词', '已选择违禁词']"
-                       :data="wordsArr">
-            <span slot-scope="{ option }">
-              <el-tooltip effect="dark"
-                          :content="option.label"
-                          placement="right">
-                <span>{{option.label}}</span>
-              </el-tooltip>
-            </span>
-          </el-transfer>
-        </el-form-item>
-      </template>
-      <template v-if="modalForm.template_type===2">
-        <el-form-item label="模板名称："
-                      prop="brand_name"
-                      label-width="115px">
-          <el-input v-model="modalForm.brand_name"
-                    placeholder="请输入模板名称"
-                    maxlength=50
-                    autocomplete="off">
-          </el-input>
-        </el-form-item>
-        <el-form-item label="违禁词："
-                      prop="select_brand"
-                      label-width="110px">
-          <el-transfer v-model="modalForm.select_brand"
-                       filterable
-                       filter-placeholder="请输入违禁词"
-                       :filter-method="filterMethod"
-                       :titles="['未选择违禁词', '已选择违禁词']"
-                       :data="wordsArr">
-            <span slot-scope="{ option }">
-              <el-tooltip effect="dark"
-                          :content="option.label"
-                          placement="right">
-                <span>{{option.label}}</span>
-              </el-tooltip>
-            </span>
-          </el-transfer>
-        </el-form-item>
-      </template>
+      <el-form-item label="违禁词："
+                    prop="select_word"
+                    label-width="110px">
+        <el-transfer v-model="modalForm.select_word"
+                     filterable
+                     filter-placeholder="请输入违禁词"
+                     :filter-method="filterMethod"
+                     :titles="['未选择违禁词', '已选择违禁词']"
+                     :data="wordsArr">
+          <span slot-scope="{ option }">
+            <el-tooltip effect="dark"
+                        :content="option.label"
+                        placement="right">
+              <span>{{option.label}}</span>
+            </el-tooltip>
+          </span>
+        </el-transfer>
+      </el-form-item>
+    </el-form>
+    <el-form v-if="isNext"
+             :model="modalFormNext"
+             :rules="modalFormNextRules"
+             ref="modalFormNext">
+      <el-form-item label="店铺名称："
+                    prop="shop_guid"
+                    label-width="115px">
+        <el-cascader v-model="modalFormNext.shop_guid"
+                     placeholder="请选择所属店铺"
+                     popper-class="brand-cascader dialog-cascader"
+                     :options="shopOption"
+                     filterable
+                     clearable>
+          <span slot-scope="{ data }">
+            <el-tooltip effect="dark"
+                        :content="data.label"
+                        placement="right">
+              <span>{{data.label}}</span>
+            </el-tooltip>
+          </span>
+        </el-cascader>
+      </el-form-item>
+      <el-form-item label="链接："
+                    prop="select_link"
+                    label-width="110px">
+        <el-transfer v-model="modalFormNext.select_link"
+                     filterable
+                     filter-placeholder="请输入链接"
+                     :filter-method="filterMethod"
+                     :titles="['未选择链接', '已选择链接']"
+                     :data="wordsArr">
+          <span slot-scope="{ option }">
+            <el-tooltip effect="dark"
+                        :content="option.label"
+                        placement="right">
+              <span>{{option.label}}</span>
+            </el-tooltip>
+          </span>
+        </el-transfer>
+      </el-form-item>
     </el-form>
     <div slot="footer"
          class="dialog-footer">
       <el-button @click="modalCancel">取 消</el-button>
       <el-button type="primary"
-                 @click="modalConfirm">确 定</el-button>
+                 @click="nextHandle"
+                 v-show="!isNext"
+                 plain>下一步</el-button>
+      <el-button type="primary"
+                 @click="modalConfirm">{{buttonText}}</el-button>
     </div>
   </el-dialog>
 </template>
 
 <script>
 import tableMixin from '@/mixins/dealTable'
-import { customModalForm, customModalFormRules } from './modalFormData'
+import { modalForm, modalFormRules } from './modalFormData'
 export default {
   mixins: [tableMixin],
   props: {
@@ -201,8 +117,12 @@ export default {
   },
   data () {
     return {
-      modalForm: JSON.parse(JSON.stringify(customModalForm)),
-      modalFormRules: customModalFormRules,
+      isNext: false, // 是否执行下一步
+      buttonText: '保存',
+      modalForm: JSON.parse(JSON.stringify(modalForm)),
+      modalFormRules: modalFormRules,
+      modalFormNext: JSON.parse(JSON.stringify(modalForm)),
+      modalFormNextRules: modalFormRules,
       wordsArr: [],
       shopOption: [],
       templateOptions: [{
@@ -245,6 +165,21 @@ export default {
 
   },
   methods: {
+    // shopGetNodes () {
+    //   // 手动遍历已选择节点添加title
+    //   setTimeout(() => { // 异步操作等待dom更新
+    //     const node = document.querySelector('#app').querySelectorAll('.el-tag')
+    //     node.forEach((item, index) => {
+    //       item.setAttribute('title', item.innerText)
+    //       // const ele = document.createElement('el-tooltip')
+    //       // ele.className = 'item'
+    //       // ele.setAttribute('placement', 'left')
+    //       // ele.setAttribute('content', item.innerText)
+    //       // item.parentNode.replaceChild(ele, item)
+    //       // ele.appendChild(item)
+    //     })
+    //   })
+    // },
     // 穿梭框搜索
     filterMethod (query, item) {
       return item.label.indexOf(query) > -1
@@ -261,7 +196,7 @@ export default {
       })
     },
     getFormData () {
-      this.$request.post('linkUpdate', { RowGuid: this.addEditId }).then(res => {
+      this.$request.post('linkUpdate', { template_guid: this.addEditId }).then(res => {
         debugger
         // this.modalForm = {
 
@@ -271,22 +206,40 @@ export default {
     restForm (refId) {
       this.$refs[refId].resetFields()
     },
+    nextHandle () {
+      this.isNext = true
+      this.buttonText = this.isNext ? '确 定' : '保 存'
+    },
     modalCancel () {
       this.$emit('modalCancel', false)
       this.restForm('moadlForm')
     },
     modalConfirm () {
+      //
+      this.templateValidate()
+    },
+    templateValidate () {
       this.$refs.moadlForm.validate((valid) => {
         if (valid) {
-          this.submitData()
+          this.templateSubmit()
         } else {
           return false
         }
       })
     },
-    submitData () {
+    shopLinkValidate () {
+      this.$refs.modalFormNext.validate((valid) => {
+        if (valid) {
+          this.shopLinkSubmit()
+        } else {
+          return false
+        }
+      })
+    },
+    // 模板-违禁词提交
+    templateSubmit () {
       const submitParams = {
-        RowGuid: this.addEditId,
+        template_guid: this.addEditId,
         link_title: this.modalForm.link_title,
         seller_type: this.modalForm.seller_type,
         shop_name: this.modalForm.shop_name[0],
@@ -302,6 +255,9 @@ export default {
           this.$message.error('保存失败')
         }
       })
+    },
+    shopLinkSubmit () {
+
     }
   }
 }

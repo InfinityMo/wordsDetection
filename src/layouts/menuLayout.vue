@@ -65,7 +65,7 @@ export default {
 .menu-wrap {
   position: fixed;
   top: 70px;
-  width: 250px;
+  width: 230px;
   height: calc(100vh - 70px);
   overflow: hidden;
   box-sizing: border-box;

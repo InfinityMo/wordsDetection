@@ -22,7 +22,7 @@ export default {
   position: fixed;
   top: 70px;
   right: 0;
-  left: 250px;
+  left: 230px;
   width: 100%;
   height: 40px;
   padding: 0 10px;

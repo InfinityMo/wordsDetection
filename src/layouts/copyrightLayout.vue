@@ -14,14 +14,12 @@ export default {
 .copyright {
   position: absolute;
   bottom: 10px;
-  // width: 100%;
-  left: calc((100% - 250px) / 2);
+  // left: calc((100% - 245px) / 2);
+  left: calc(50% - 5px);
   padding-top: 15px;
   font-size: 15px;
   color: #333;
-  // font-weight: bold;
   text-align: center;
   box-sizing: border-box;
-  // z-index: 10;
 }
 </style>
