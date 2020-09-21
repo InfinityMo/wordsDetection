@@ -6,9 +6,6 @@ export const columnsData = (h, $this) => [{
   dataKey: 'template_name',
   title: '模板名称'
 }, {
-  dataKey: 'template_type',
-  title: '模板类型'
-}, {
   dataKey: 'is_valid',
   title: '有效性',
   render: (h, scoped) => {

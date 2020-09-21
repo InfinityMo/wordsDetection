@@ -45,7 +45,7 @@
                 <span slot-scope="{ data }">
                   <el-tooltip effect="dark"
                               :content="data.label"
-                              placement="right">
+                              placement="left">
                     <span>{{data.label}}</span>
                   </el-tooltip>
                 </span>

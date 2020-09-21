@@ -19,7 +19,7 @@
                 <span slot-scope="{ data }">
                   <el-tooltip effect="dark"
                               :content="data.label"
-                              placement="right">
+                              placement="left">
                     <span>{{data.label}}</span>
                   </el-tooltip>
                 </span>
@@ -48,6 +48,7 @@
     </div>
     <Dialog :modalTitle="modalTitle"
             :addEditId="addEditId"
+            :brandArr="brandArr"
             v-if="modalShow"
             :modalShow="modalShow"
             @modalCancel="modalCancel"
@@ -73,7 +74,8 @@ export default {
       selectOption: [],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
-      addEditId: ''// 编辑时存在id，新增时id为空
+      addEditId: '', // 编辑时存在id，新增时id为空
+      brandArr: [] // 弹窗品牌穿梭框数据
     }
   },
   watch: {
@@ -107,23 +109,41 @@ export default {
     },
     // 新增
     addHandle () {
-      this.addEditId = ''
-      this.modalTitle = '新增店铺'
-      this.modalShow = true
+      this._getSelectData(6).then(res => {
+        res.map(item => {
+          this.brandArr.push({
+            label: item.label,
+            key: item.value
+          })
+        })
+        this.addEditId = ''
+        this.modalTitle = '新增店铺'
+        this.modalShow = true
+      })
     },
     editMoadl (scoped) {
-      this.modalShow = true
-      const { row } = scoped
-      this.addEditId = row.RowGuid
-      this.modalTitle = '编辑店铺'
+      this._getSelectData(6).then(res => {
+        res.map(item => {
+          this.brandArr.push({
+            label: item.label,
+            key: item.value
+          })
+        })
+        this.modalShow = true
+        const { row } = scoped
+        this.addEditId = row.RowGuid
+        this.modalTitle = '编辑店铺'
+      })
     },
     // modal确认
     modalConfirm () {
       this.modalShow = false
+      this.brandArr = []
       this.getTableData()
     },
     // moadl关闭
     modalCancel () {
+      this.brandArr = []
       this.modalShow = false
     },
     deleteHandle (scoped) {

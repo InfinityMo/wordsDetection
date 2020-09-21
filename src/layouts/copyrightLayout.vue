@@ -14,8 +14,8 @@ export default {
 .copyright {
   position: absolute;
   bottom: 10px;
-  // left: calc((100% - 245px) / 2);
-  left: calc(50% - 5px);
+  left: calc((100% - 245px) / 2);
+  // left: calc(50% - 5px);
   padding-top: 15px;
   font-size: 15px;
   color: #333;

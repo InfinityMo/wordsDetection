@@ -20,7 +20,7 @@
                   <span slot-scope="{ data }">
                     <el-tooltip effect="dark"
                                 :content="data.label"
-                                placement="right">
+                                placement="left">
                       <span>{{data.label}}</span>
                     </el-tooltip>
                   </span>
@@ -43,51 +43,10 @@
               </el-select>
             </el-form-item>
           </el-col>
-          <el-col :span="7">
-            <el-form-item label="模板类型："
-                          label-width="80px">
-              <el-select v-model="searchForm.template_type"
-                         placeholder="请选择模板类型">
-                <el-option v-for="item in tempalteTypeOption"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="3">
+          <el-col :span="10">
             <el-form-item class="search-btn">
               <el-button type="primary"
                          @click="queryHandel">查询</el-button>
-            </el-form-item>
-          </el-col>
-        </div>
-        <div class="clearfix form-row"
-             v-if="searchForm.template_type===2">
-          <el-col :span="7">
-            <el-form-item label="店铺名称："
-                          label-width="80px">
-              <el-tooltip class="tooltip-reset"
-                          effect="dark"
-                          :disabled="shopTipContent ? false:true"
-                          :content="shopTipContent"
-                          placement="top-start">
-                <el-cascader v-model="searchForm.shop_guid"
-                             placeholder="请选择店铺名称"
-                             popper-class="reset-casc"
-                             :options="shopOption"
-                             filterable
-                             clearable>
-                  <span slot-scope="{ data }">
-                    <el-tooltip effect="dark"
-                                :content="data.label"
-                                placement="right">
-                      <span>{{data.label}}</span>
-                    </el-tooltip>
-                  </span>
-                </el-cascader>
-              </el-tooltip>
             </el-form-item>
           </el-col>
         </div>
@@ -106,6 +65,7 @@
     </div>
     <Dialog :modalTitle="modalTitle"
             :addEditId="addEditId"
+            :wordsArr="wordsArr"
             v-if="modalShow"
             :modalShow="modalShow"
             @modalCancel="modalCancel"
@@ -123,9 +83,8 @@ export default {
   data () {
     return {
       templateTipContent: '',
-      shopTipContent: '',
       searchForm: JSON.parse(JSON.stringify(tableSearchForm)),
-      queryFrom: { template_guid: '', template_type: '', is_valid: -1, shop_guid: '' },
+      queryFrom: { template_guid: '', is_valid: -1 },
       columns: columnsData(this.$createElement, this),
       tableData: [],
       tempalteOption: [],
@@ -152,24 +111,17 @@ export default {
       }],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
-      addEditId: '' // 编辑时存在id，新增时id为空
+      addEditId: '', // 编辑时存在id，新增时id为空
+      wordsArr: [] // 弹窗违禁词穿梭框数据源
     }
   },
   watch: {
-    // 模板类型
+    // 模板名称
     'searchForm.template_guid' (newVal, oldVal) {
       if (newVal.length && newVal.length > 0) {
         this.templateTipContent = this.tempalteOption.filter(item => item.value === this.searchForm.template_guid[0])[0].label
       } else {
         this.templateTipContent = ''
-      }
-    },
-    // 店铺名称
-    'searchForm.shop_guid' (newVal, oldVal) {
-      if (newVal.length && newVal.length > 0) {
-        this.shopTipContent = this.shopOption.filter(item => item.value === this.searchForm.shop_guid[0])[0].label
-      } else {
-        this.shopTipContent = ''
       }
     }
   },
@@ -202,24 +154,42 @@ export default {
     },
     // 新增
     addHandle () {
-      this.addEditId = ''
-      this.modalTitle = '新增白名单模板'
-      this.modalShow = true
+      this._getSelectData(7).then(res => {
+        res.forEach(item => {
+          this.wordsArr.push({
+            label: item.label,
+            key: item.value
+          })
+        })
+        this.addEditId = ''
+        this.modalTitle = '新增白名单模板'
+        this.modalShow = true
+      })
     },
     editMoadl (scoped) {
-      this.modalShow = true
-      const { row } = scoped
-      this.addEditId = row.template_guid
-      this.modalTitle = '编辑白名单模板'
+      this._getSelectData(7).then(res => {
+        res.forEach(item => {
+          this.wordsArr.push({
+            label: item.label,
+            key: item.value
+          })
+        })
+        this.modalShow = true
+        const { row } = scoped
+        this.addEditId = row.template_guid
+        this.modalTitle = '编辑白名单模板'
+      })
     },
     // modal确认
     modalConfirm () {
       this.modalShow = false
+      this.wordsArr = []
       this.getTableData()
     },
     // moadl关闭
     modalCancel () {
       this.modalShow = false
+      this.wordsArr = []
     },
     switchChange (scoped) {
       const { row } = scoped
@@ -233,7 +203,6 @@ export default {
       }).then(res => {
         if (res.errorCode === 1) {
           this.$message.success('操作成功')
-
           this.getTableData()
         } else {
           this.$message.error('操作失败')
@@ -242,7 +211,7 @@ export default {
     },
     deleteHandle (scoped) {
       const { row } = scoped
-      this.$request.post('/linkDelete', {
+      this.$request.post('/templateDelete', {
         template_guid: row.template_guid
       }).then(res => {
         if (res.errorCode === 1) {

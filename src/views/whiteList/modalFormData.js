@@ -9,7 +9,7 @@ export const modalFormRules = {
     { required: true, message: '请输入模板名称', trigger: 'blur' }
   ],
   select_word: [
-    { required: true, message: '请选择违禁词', trigger: 'blur' }
+    { required: true, message: '请选择违禁词', trigger: ['blur', 'change'] }
   ]
 }
 export const modalFormNext = {

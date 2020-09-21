@@ -23,6 +23,6 @@ export const modalFormRules = {
     { pattern: /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/, message: '请填写正确的店铺链接！', trigger: 'blur' }
   ],
   select_brand: [
-    { required: true, message: '请选择品牌', trigger: 'blur' }
+    { required: true, message: '请选择品牌', trigger: ['change', 'blur'] }
   ]
 }

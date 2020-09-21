@@ -6,8 +6,8 @@ export const modalForm = {
 export const modalFormRules = {
   word: [
     { required: true, message: '请输入违禁词', trigger: 'blur' }
-  ],
-  templateGuidList: [
-    { required: true, message: '请选择违禁词', trigger: 'blur' }
   ]
+  // templateGuidList: [
+  //   { required: true, message: '请选择违禁词', trigger: ['change', 'blur'] }
+  // ]
 }

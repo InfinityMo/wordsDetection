@@ -97,7 +97,7 @@
           <span slot-scope="{ option }">
             <el-tooltip effect="dark"
                         :content="option.label"
-                        placement="right">
+                        placement="left">
               <span>{{option.label}}</span>
             </el-tooltip>
           </span>
@@ -135,6 +135,10 @@ export default {
     addEditId: {
       type: [String, Number],
       required: true
+    },
+    brandArr: {
+      type: Array,
+      required: true
     }
   },
   data () {
@@ -160,24 +164,10 @@ export default {
           value: 0,
           label: '外部'
         }
-      ],
-      brandArr: []
+      ]
     }
   },
-  watch: {
-    // 'modalForm.shop_url' (newVal, oldVal) {
-    //   console.log(newVal)
-    // }
-  },
   created () {
-    this._getSelectData(6).then(res => {
-      res.map(item => {
-        this.brandArr.push({
-          label: item.label,
-          key: item.value
-        })
-      })
-    })
     if (this.addEditId) {
       this.disabled = true
       this.getFormData()
