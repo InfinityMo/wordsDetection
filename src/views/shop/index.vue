@@ -88,14 +88,17 @@ export default {
     }
   },
   created () {
-    this._getSelectData(1).then(res => {
-      this.selectOption = res
-    }) // 获取下拉框数据
+    this.getSelects()
   },
   mounted () {
     this.getTableData() // 获取列表数据
   },
   methods: {
+    getSelects () {
+      this._getSelectData(1).then(res => {
+        this.selectOption = res
+      }) // 获取下拉框数据
+    },
     getTableData () {
       this.$request.post('/shopSelect', {
         pageNum: this.PAGING.pageNum,
@@ -139,7 +142,9 @@ export default {
     modalConfirm () {
       this.modalShow = false
       this.brandArr = []
+      this.selectOption = []
       this.getTableData()
+      this.getSelects()
     },
     // moadl关闭
     modalCancel () {

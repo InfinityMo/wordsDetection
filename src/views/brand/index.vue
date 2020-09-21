@@ -91,14 +91,17 @@ export default {
     }
   },
   created () {
-    this._getSelectData(2).then(res => {
-      this.selectOption = res
-    }) // 获取下拉框数据
+    this.getSelectData()
   },
   mounted () {
     this.getTableData() // 获取列表数据
   },
   methods: {
+    getSelectData () {
+      this._getSelectData(2).then(res => {
+        this.selectOption = res
+      }) // 获取下拉框数据
+    },
     getTableData () {
       this.$request.post('/brandSelect', {
         pageNum: this.PAGING.pageNum,
@@ -132,7 +135,9 @@ export default {
     // modal确认
     modalConfirm () {
       this.modalShow = false
+      this.selectOption = []
       this.getTableData()
+      this.getSelectData()
     },
     // moadl关闭
     modalCancel () {

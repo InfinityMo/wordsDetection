@@ -5,13 +5,33 @@
         <el-col :span="7">
           <el-form-item label="违禁词："
                         label-width="80px">
-            <el-cascader v-model="searchForm.wordGuid"
+            <!-- <el-cascader v-model="searchForm.wordGuid"
                          placeholder="请选择违禁词"
                          popper-class="reset-casc"
                          :options="selectOption"
                          filterable
                          clearable>
-            </el-cascader>
+            </el-cascader> -->
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="wordsTipContent ? false:true"
+                        :content="wordsTipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.wordGuid"
+                           placeholder="请选择违禁词"
+                           popper-class="reset-casc"
+                           :options="selectOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="left">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="7">
@@ -50,6 +70,7 @@
     </div>
     <Dialog :modalTitle="modalTitle"
             :addEditId="addEditId"
+            :whiteList="whiteList"
             v-if="modalShow"
             :modalShow="modalShow"
             @modalCancel="modalCancel"
@@ -66,6 +87,7 @@ export default {
   components: { Dialog },
   data () {
     return {
+      wordsTipContent: '',
       effectOptions: [{
         value: -1,
         label: '全部'
@@ -81,20 +103,40 @@ export default {
       columns: columnsData(this.$createElement, this),
       tableData: [],
       selectOption: [],
+      whiteList: [],
       modalTitle: '', // 弹窗的名称
       modalShow: false,
       addEditId: '' // 编辑时存在id，新增时id为空
     }
   },
+  watch: {
+    // 模板名称
+    'searchForm.wordGuid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.wordsTipContent = this.selectOption.filter(item => item.value === this.searchForm.wordGuid[0])[0].label
+      } else {
+        this.wordsTipContent = ''
+      }
+    }
+  },
   created () {
-    this._getSelectData(7).then(res => {
-      this.selectOption = res
-    }) // 获取下拉框数据
+    this.getSelectData()
   },
   mounted () {
     this.getTableData()
   },
   methods: {
+    getSelectData () {
+      Promise.all([this._getSelectData(7), this._getSelectData(4)]).then(res => {
+        this.selectOption = res[0] // 模板名称
+        res[1].map(item => {
+          this.whiteList.push({
+            label: item.label,
+            key: item.value
+          })
+        })
+      })
+    },
     getTableData () {
       this.$request.post('/getwordinfo', {
         pageNum: this.PAGING.pageNum,
@@ -129,7 +171,10 @@ export default {
     // modal确认
     modalConfirm () {
       this.modalShow = false
+      this.selectOption = []
+      this.whiteList = []
       this.getTableData()
+      this.getSelectData() // 重新获取下拉框数据
     },
     // moadl关闭
     modalCancel () {

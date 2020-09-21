@@ -12,18 +12,26 @@
                     prop="word"
                     label-width="115px">
         <el-input v-model="modalForm.word"
+                  :disabled="disabled"
+                  maxlength=20
                   autocomplete="off">
         </el-input>
       </el-form-item>
       <el-form-item label="白名单模板："
-                    prop="templateGuidList"
                     label-width="115px">
-        <el-transfer v-model="modalForm.templateGuidList"
+        <el-transfer v-model="modalForm.templateList"
                      filterable
                      filter-placeholder="请输入白名单"
                      :filter-method="filterMethod"
                      :titles="['未选择白名单', '已选择白名单']"
-                     :data="wordsArr">
+                     :data="whiteList">
+          <span slot-scope="{ option }">
+            <el-tooltip effect="dark"
+                        :content="option.label"
+                        placement="left">
+              <span>{{option.label}}</span>
+            </el-tooltip>
+          </span>
         </el-transfer>
       </el-form-item>
     </el-form>
@@ -58,13 +66,17 @@ export default {
     addEditId: {
       type: [String, Number],
       required: true
+    },
+    whiteList: {
+      type: Array,
+      required: true
     }
   },
   data () {
     return {
       modalForm: JSON.parse(JSON.stringify(modalForm)),
       modalFormRules: modalFormRules,
-      wordsArr: []
+      disabled: false
     }
   },
   watch: {
@@ -73,18 +85,10 @@ export default {
 
   },
   created () {
-    // 请求获取白名单模板
-    this._getSelectData(1).then(res => {
-      res.map(item => {
-        this.wordsArr.push({
-          label: item.label,
-          key: item.value
-        })
-      })
-    })
     // 是编辑获取表单数据
     if (this.addEditId) {
       this.getFormData()
+      this.disabled = true
     }
   },
   mounted () {
@@ -123,7 +127,7 @@ export default {
       const submitParams = {
         wordGuid: this.addEditId,
         word: this.modalForm.word,
-        templateGuidList: this.modalForm.templateGuidList
+        templateList: this.modalForm.templateList.join()
       }
       this.$request.post('/addWord', submitParams).then(res => {
         if (res.errorCode === 1) {

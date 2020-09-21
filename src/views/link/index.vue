@@ -219,7 +219,11 @@ export default {
     // modal确认
     modalConfirm () {
       this.modalShow = false
+      this.shopOption = []
+      this.brandOption = []
+      this.linkOption = []
       this.getTableData()
+      this.getSelects()
     },
     // moadl关闭
     modalCancel () {

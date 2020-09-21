@@ -133,9 +133,8 @@ export default {
   },
   methods: {
     getSelects () {
-      Promise.all([this._getSelectData(1), this._getSelectData(4)]).then(res => {
-        this.shopOption = res[0]
-        this.tempalteOption = res[1]
+      Promise.all([this._getSelectData(4)]).then(res => {
+        this.tempalteOption = res[0]
       })
     },
     getTableData () {
@@ -183,8 +182,10 @@ export default {
     // modal确认
     modalConfirm () {
       this.modalShow = false
+      this.tempalteOption = []
       this.wordsArr = []
       this.getTableData()
+      this.getSelects()
     },
     // moadl关闭
     modalCancel () {
@@ -231,9 +232,8 @@ export default {
     },
     queryHandel () {
       this.queryFrom = {
-        shop_guid: this.searchForm.shop_guid[0] || '',
-        link_row_guid: this.searchForm.link_row_guid[0] || '',
-        brand_guid: this.searchForm.brand_guid[0] || ''
+        template_guid: this.searchForm.template_guid[0] || '',
+        is_valid: this.searchForm.is_valid
       }
       this.getTableData()
     },

@@ -26,7 +26,6 @@ export const columnsData = (h, $this) => [{
   title: '操作',
   width: 120,
   render: (h, scoped) => {
-    console.log(scoped.valid)
     return (
       <div>
         {scoped.row.valid ? <span>

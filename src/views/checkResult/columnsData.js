@@ -3,21 +3,21 @@ export const columnsData = (h, $this) => [{
   title: '序号',
   width: 80
 }, {
-  dataKey: 'shop_name',
+  dataKey: 'shopName',
   title: '店铺名称'
 }, {
-  dataKey: 'check_title_amount',
+  dataKey: 'linkAmount',
   title: '检查标题数'
 }, {
-  dataKey: 'error_amount',
+  dataKey: 'errorAmount',
   title: '总错误数'
 },
 {
-  dataKey: 'error_link_amount',
+  dataKey: 'errorLinkAmount',
   title: '出错标题数'
 },
 {
-  dataKey: 'create_time',
+  dataKey: 'checkTime',
   title: '检查时间'
 },
 {

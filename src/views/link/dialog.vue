@@ -12,7 +12,7 @@
                     prop="link_title"
                     label-width="115px">
         <el-input v-model="modalForm.link_title"
-                  maxlength="50"
+                  maxlength=50
                   placeholder="请输入链接标题"
                   autocomplete="off">
         </el-input>
@@ -108,7 +108,7 @@
                     label-width="115px">
         <el-input v-model="modalForm.link_url"
                   :disabled="disabled"
-                  maxlength="500"
+                  maxlength=500
                   placeholder="请输入商品详情地址"
                   autocomplete="off">
         </el-input>

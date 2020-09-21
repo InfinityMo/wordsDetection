@@ -5,20 +5,34 @@
         <el-col :span="7">
           <el-form-item label="店铺名称："
                         label-width="80px">
-            <el-cascader v-model="searchForm.brandName"
-                         popper-class="reset-casc"
-                         placeholder="请选择店铺"
-                         :options="shopOption"
-                         clearable
-                         filterable>
-            </el-cascader>
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="tipContent ? false:true"
+                        :content="tipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.shopGuid"
+                           placeholder="请选择店铺名称"
+                           popper-class="reset-casc"
+                           :options="shopOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="left">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
           </el-form-item>
         </el-col>
         <el-col :span="7">
           <el-form-item label="检测时间："
                         label-width="80px">
             <el-date-picker class="form-date-picker"
-                            v-model="searchForm.ceate_time"
+                            v-model="searchForm.checkTime"
+                            value-format="yyyy-MM-dd"
                             type="daterange"
                             align="right"
                             unlink-panels
@@ -51,13 +65,11 @@
 <script>
 import tableMixin from '@/mixins/dealTable'
 import { columnsData } from './columnsData.js'
-import { modalForm, modalFormRules } from './modalFormData'
-// 联调后删除
-import { tableData } from './data'
 export default {
   mixins: [tableMixin],
   data () {
     return {
+      tipContent: '',
       datePickerOptions: {
         shortcuts: [{
           text: '最近一周',
@@ -85,52 +97,58 @@ export default {
           }
         }]
       },
-      searchForm: { brandName: '' },
+      searchForm: { shopGuid: '', checkTime: '' },
+      queryFrom: { shopGuid: '', startDate: '', endDate: '' },
       columns: columnsData(this.$createElement, this),
-      tableData: tableData,
-      shopOption: [],
-      modalTitle: '', // 弹窗的名称
-      modalShow: false,
-      modalForm: modalForm,
-      modalFormRules: modalFormRules,
-      addEditId: '' // 编辑时存在id，新增时id为空
+      tableData: [],
+      shopOption: []
+    }
+  },
+  watch: {
+    'searchForm.shopGuid' (newVal, oldVal) {
+      if (newVal.length && newVal.length > 0) {
+        this.tipContent = this.shopOption.filter(item => item.value === this.searchForm.shopGuid[0])[0].label
+      } else {
+        this.tipContent = ''
+      }
     }
   },
   created () {
     this._getSelectData(1).then(res => {
       this.shopOption = res
     })
-  },
-  mounted () {
-    // 联调时删除
-    this.PAGING.total = this.tableData.length
+    this.getTableData() // 获取列表数据
   },
   methods: {
-    // 新增
-    addHandle () {
-      this.addEditId = ''
-      this.modalTitle = '新增品牌'
-      this.modalShow = true
+    getTableData () {
+      this.$request.post('/resultSelect', {
+        pageNum: this.PAGING.pageNum,
+        pageSize: this.PAGING.pageSize,
+        ...this.queryFrom
+      }).then(res => {
+        const resData = res.data.result || []
+        this.tableData = resData
+        this.PAGING.total = res.data.total
+      })
     },
     viewHandle (scoped) {
-      this.modalShow = true
       const { row } = scoped
-      this.addEditId = row.id
-      this.modalTitle = '编辑品牌'
-    },
-    // modal确认
-    modalConfirm () {
-      debugger
-    },
-    // moadl关闭
-    modalCancel () {
-      this.modalShow = false
-    },
-    deleteHandle (scoped) {
-      debugger
+      this.$router.push({
+        // path: '/check/checkResultInfo',
+        name: 'checkResultInfo',
+        params: {
+          shopGuid: row.shopGuid || '',
+          checkTime: row.checkTime || ''
+        }
+      })
     },
     queryHandel () {
-      console.log(this.searchForm.brandName[0])
+      this.queryFrom = {
+        shopGuid: this.searchForm.shopGuid[0] || '',
+        startDate: this.searchForm.checkTime ? this.searchForm.checkTime[0] : '',
+        endDate: this.searchForm.checkTime ? this.searchForm.checkTime[1] : ''
+      }
+      this.getTableData()
     },
     // 表格分页的变化
     tableChange (changeParams) {

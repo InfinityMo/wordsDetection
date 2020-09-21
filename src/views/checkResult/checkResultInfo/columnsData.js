@@ -3,33 +3,17 @@ export const columnsData = (h, $this) => [{
   title: '序号',
   width: 80
 }, {
-  dataKey: 'shop_name',
+  dataKey: 'shopName',
   title: '店铺名称'
 }, {
-  dataKey: 'link_name',
+  dataKey: 'linkTitle',
   title: '标题'
 }, {
-  dataKey: 'prohibited_word',
+  dataKey: 'prohibitedWord',
   title: '违禁词'
 },
 {
-  dataKey: 'create_time',
+  dataKey: 'checkTime',
   title: '检测时间'
-},
-{
-  dataKey: 'deal_status',
-  title: '状态'
 }
-  // {
-  //   dataKey: 'operate',
-  //   title: '操作',
-  //   width: 120,
-  //   render: (h, scoped) => {
-  //     return (
-  //       <div>
-  //         <el-button type="text" onClick={() => $this.editMoadl(scoped)}>查看</el-button>
-  //       </div>
-  //     )
-  //   }
-  // }
 ]

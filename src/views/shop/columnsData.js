@@ -18,10 +18,10 @@ export const columnsData = (h, $this) => [{
   dataKey: 'update_time',
   title: '更新时间'
 },
-{
-  dataKey: 'update_by',
-  title: '更新人'
-},
+// {
+//   dataKey: 'update_by',
+//   title: '更新人'
+// },
 {
   dataKey: 'operate',
   title: '操作',

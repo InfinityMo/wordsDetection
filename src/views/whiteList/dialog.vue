@@ -15,6 +15,7 @@
                       label-width="115px">
           <el-input v-model="modalForm.template_name"
                     :disabled="disabled"
+                    @blur="templateBlur"
                     placeholder="请输入模板名称"
                     maxlength=50
                     autocomplete="off">
@@ -66,21 +67,6 @@
         <el-form-item label="链接："
                       prop="select_link"
                       label-width="110px">
-          <!-- <el-transfer v-model="modalFormNext.select_link"
-                       @change="selectLinkChange"
-                       filterable
-                       filter-placeholder="请输入链接"
-                       :filter-method="filterMethod"
-                       :titles="['未选择链接', '已选择链接']"
-                       :data="shopLinkArr">
-            <span slot-scope="{ option }">
-              <el-tooltip effect="dark"
-                          :content="option.label"
-                          placement="left">
-                <span>{{option.label}}</span>
-              </el-tooltip>
-            </span>
-          </el-transfer> -->
           <transferCom :shopLinkArr="shopLinkArr"
                        ref="transferCom"
                        :key="transferKey"
@@ -181,28 +167,6 @@ export default {
       cacheSelectLink: '' // 缓存下拉框上次的选择记录
     }
   },
-  watch: {
-    // 'modalFormNext.select_link' (newVal, oldVal) {
-    //   console.log(newVal)
-    //   console.log(oldVal)
-    // }
-    // 'modalFormNext.shop_guid' (newVal, oldVal) {
-    //   console.log(newVal)
-    //   console.log(this.shopIsChange)
-    //   console.log(this.linkSelectIsChange)
-    //   if (newVal.length && newVal.length > 0 && this.shopIsChange && this.linkSelectIsChange) {
-    //     this.shopChangeTip = true
-    //   } else {
-    //     this.shopChangeTip = false
-    //   }
-    // }
-    // 'shopIsChange' (newVal, oldVal) {
-    //   debugger
-    // }
-  },
-  computed: {
-
-  },
   async created () {
     await this.getSelects()
     if (this.addEditId) {
@@ -212,7 +176,6 @@ export default {
       this.disabled = false
     }
   },
-
   mounted () {
     this.nextId = this.addEditId
   },
@@ -364,6 +327,18 @@ export default {
           })
         } else {
           return false
+        }
+      })
+    },
+    templateBlur (e) {
+      const value = e.target.value
+      this.$request.post('/templatenamecheck', { template_name: value }).then(res => {
+        if (res.errorCode === 1) {
+          if (res.data) {
+            this.$message.warning('已存在相同的模板名称')
+          }
+        } else {
+
         }
       })
     }
