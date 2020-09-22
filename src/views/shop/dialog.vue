@@ -249,8 +249,13 @@ export default {
           if (value === '') {
             callback(new Error('请输入店铺链接'))
           } else {
-            if (this.urlCheck(value)) {
-              callback()
+            const reg = /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/
+            if (reg.test(value)) {
+              if (this.urlCheck(value)) {
+                callback()
+              } else {
+                callback(new Error('请输入正确的店铺链接'))
+              }
             } else {
               callback(new Error('请输入正确的店铺链接'))
             }
