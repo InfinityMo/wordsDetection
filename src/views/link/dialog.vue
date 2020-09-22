@@ -38,14 +38,6 @@
           <el-form-item label="所属店铺："
                         prop="shop_name"
                         label-width="115px">
-            <!-- <el-cascader v-model="modalForm.shop_name"
-                         popper-class="brand-cascader dialog-cascader"
-                         :disabled="disabled"
-                         placeholder="请选择所属店铺"
-                         :options="shopOption"
-                         clearable
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="shopTipContent ? false:true"
@@ -73,14 +65,6 @@
       <el-form-item label="所属品牌："
                     prop="brand_name"
                     label-width="115px">
-        <!-- <el-cascader v-model="modalForm.brand_name"
-                     popper-class="brand-cascader dialog-cascader"
-                     :disabled="disabled"
-                     placeholder="请选择所属品牌"
-                     :options="brandOption"
-                     clearable
-                     filterable>
-        </el-cascader> -->
         <el-tooltip class="tooltip-reset"
                     effect="dark"
                     :disabled="brandTipContent ? false:true"

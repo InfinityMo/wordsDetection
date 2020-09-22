@@ -30,12 +30,6 @@ const mixins = {
         })
       })
     },
-    _dealFormParams () {
-      // const queryParams = {}
-      // Object.keys(this.searchForm).forEach((i, index) => {
-      //   typeof (this.searchForm[i])===''
-      // })
-    },
     _isLastPage () {
       const lastPage = Math.ceil(this.PAGING.total / this.PAGING.pageSize)
       // 判断当前页是否是最后一页

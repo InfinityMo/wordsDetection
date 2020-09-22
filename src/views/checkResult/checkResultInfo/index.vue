@@ -46,12 +46,6 @@
         <el-col :span="7">
           <el-form-item label="链接："
                         label-width="80px">
-            <!-- <el-cascader v-model="searchForm.brandName"
-                         :disabled="linkDisabled"
-                         placeholder="请选择链接"
-                         :options="linkOption"
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="linkTipContent ? false:true"
@@ -142,7 +136,7 @@ export default {
   },
   watch: {
     'searchForm.shopGuid' (newVal, oldVal) {
-      if (newVal.length && newVal.length > 0) {
+      if (newVal.length && newVal.length > 0 && newVal[0]) {
         this.getLinkSelect(this.searchForm.shopGuid[0])
         this.linkDisabled = false
         this.tipContent = this.shopOption.filter(item => item.value === this.searchForm.shopGuid[0])[0].label
@@ -165,11 +159,13 @@ export default {
     this._getSelectData(1).then(res => {
       this.shopOption = res
       const queryParams = this.$route.params
-      this.queryFrom.shopGuid = queryParams.shopGuid
-      this.queryFrom.startDate = queryParams.checkTime
-      this.queryFrom.endDate = queryParams.checkTime
-      this.searchForm.shopGuid = [queryParams.shopGuid]
-      this.searchForm.checkTime = [queryParams.checkTime, queryParams.checkTime]
+      if (Object.keys(queryParams).length > 0) {
+        this.queryFrom.shopGuid = queryParams.shopGuid
+        this.queryFrom.startDate = queryParams.checkTime
+        this.queryFrom.endDate = queryParams.checkTime
+        this.searchForm.shopGuid = [queryParams.shopGuid]
+        this.searchForm.checkTime = [queryParams.checkTime, queryParams.checkTime]
+      }
       this.getTableData() // 获取列表数据
     })
   },
@@ -218,24 +214,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search-wrap {
-  // width: 100%;
-  padding: 15px;
-  background-color: #fff;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-.table-wrap {
-  padding: 15px;
-  margin-top: 15px;
-  background-color: #fff;
-  .table-info {
-    margin-bottom: 20px;
-    h4 {
-      font-size: 20px;
-      // font-weight: bold;
-    }
-  }
-}
+@import "../../../common/styles/page-table";
 </style>

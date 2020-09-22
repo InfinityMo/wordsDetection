@@ -22,14 +22,6 @@
           <el-form-item label="主品牌："
                         prop="parent_brand_guid"
                         label-width="120px">
-            <!-- <el-cascader v-model="modalForm.parent_brand_guid"
-                         popper-class="brand-cascader dialog-cascader"
-                         :disabled="disabled"
-                         placeholder="请选择主品牌"
-                         :options="selectOption"
-                         clearable
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="tipContent ? false:true"
@@ -109,14 +101,6 @@ export default {
     }
   },
   watch: {
-    // 'addEditId' (oldVal, newVal) {
-    //   this.initSelectData()
-    //   if (this.addEditId) {
-    //     this.disabled = false
-    //   } else {
-    //     this.disabled = true
-    //   }
-    // },
     'modalForm.parent_brand_guid' (newVal, oldVal) {
       if (newVal.length && newVal.length > 0) {
         this.tipContent = this.selectOption.filter(item => item.value === this.modalForm.parent_brand_guid[0])[0].label

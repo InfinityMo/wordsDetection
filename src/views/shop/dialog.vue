@@ -190,9 +190,6 @@ export default {
         cutIndex = comIndex + 4
       }
       if (comIndex === -1 && hkIndex === -1) {
-        // this.$message.error('请输入正确的店铺地址')
-        // this.modalForm.shop_url = ''
-        // return
         return false
       }
       const cutStr = formatVal.substring(0, cutIndex)

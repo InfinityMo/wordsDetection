@@ -5,13 +5,6 @@
         <el-col :span="7">
           <el-form-item label="店铺名称："
                         label-width="80px">
-            <!-- <el-cascader v-model="searchForm.shop_guid"
-                         placeholder="请选择店铺名称"
-                         popper-class="reset-casc"
-                         :options="shopOption"
-                         clearable
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="shopTipContent ? false:true"
@@ -37,13 +30,6 @@
         <el-col :span="7">
           <el-form-item label="链接标题："
                         label-width="80px">
-            <!-- <el-cascader v-model="searchForm.link_row_guid"
-                         placeholder="请选择链接标题"
-                         popper-class="reset-casc"
-                         :options="linkOption"
-                         clearable
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="linkTipContent ? false:true"
@@ -69,13 +55,6 @@
         <el-col :span="7">
           <el-form-item label="品牌名称："
                         label-width="80px">
-            <!-- <el-cascader v-model="searchForm.brand_guid"
-                         placeholder="请选择品牌名称"
-                         popper-class="reset-casc"
-                         :options="brandOption"
-                         clearable
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="brandTipContent ? false:true"
@@ -262,24 +241,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search-wrap {
-  // width: 100%;
-  padding: 15px;
-  background-color: #fff;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-.table-wrap {
-  padding: 15px;
-  margin-top: 15px;
-  background-color: #fff;
-  .table-info {
-    margin-bottom: 20px;
-    h4 {
-      font-size: 20px;
-      // font-weight: bold;
-    }
-  }
-}
+@import "../../common/styles/page-table";
 </style>

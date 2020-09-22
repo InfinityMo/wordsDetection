@@ -4,13 +4,6 @@
       <el-form class="demo-form-inline">
         <el-col :span="7">
           <el-form-item label="品牌名称：">
-            <!-- <el-cascader v-model="searchForm.RowGuid"
-                         placeholder="请选择品牌名称"
-                         popper-class="reset-casc"
-                         :options="selectOption"
-                         clearable
-                         filterable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="tipContent ? false:true"
@@ -110,13 +103,6 @@ export default {
       }).then(res => {
         const resData = res.data.result || []
         this.tableData = resData
-        // resData.map(item => {
-        //   this.tableData.push({
-        //     RowGuid: item.RowGuid,
-        //     brand_name: item.brand_name,
-        //     parent_brand_name: item.parent_brand_name
-        //   })
-        // })
         this.PAGING.total = res.data.total
       })
     },
@@ -174,24 +160,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search-wrap {
-  // width: 100%;
-  padding: 15px;
-  background-color: #fff;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-.table-wrap {
-  padding: 15px;
-  margin-top: 15px;
-  background-color: #fff;
-  .table-info {
-    margin-bottom: 20px;
-    h4 {
-      font-size: 20px;
-      // font-weight: bold;
-    }
-  }
-}
+@import "../../common/styles/page-table";
 </style>

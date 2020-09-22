@@ -182,24 +182,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search-wrap {
-  // width: 100%;
-  padding: 15px;
-  background-color: #fff;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-.table-wrap {
-  padding: 15px;
-  margin-top: 15px;
-  background-color: #fff;
-  .table-info {
-    margin-bottom: 20px;
-    h4 {
-      font-size: 20px;
-      // font-weight: bold;
-    }
-  }
-}
+@import "../../common/styles/page-table";
 </style>

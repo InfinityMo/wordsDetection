@@ -5,13 +5,6 @@
         <el-col :span="7">
           <el-form-item label="违禁词："
                         label-width="80px">
-            <!-- <el-cascader v-model="searchForm.wordGuid"
-                         placeholder="请选择违禁词"
-                         popper-class="reset-casc"
-                         :options="selectOption"
-                         filterable
-                         clearable>
-            </el-cascader> -->
             <el-tooltip class="tooltip-reset"
                         effect="dark"
                         :disabled="wordsTipContent ? false:true"
@@ -225,24 +218,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search-wrap {
-  // width: 100%;
-  padding: 15px;
-  background-color: #fff;
-  .el-form-item {
-    margin-bottom: 0;
-  }
-}
-.table-wrap {
-  padding: 15px;
-  margin-top: 15px;
-  background-color: #fff;
-  .table-info {
-    margin-bottom: 20px;
-    h4 {
-      font-size: 20px;
-      // font-weight: bold;
-    }
-  }
-}
+@import "../../common/styles/page-table";
 </style>

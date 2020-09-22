@@ -177,7 +177,11 @@ export default {
   },
   mounted () {
     this.nextId = this.addEditId
-    this.editModalFormRules()
+    if (!this.addEditId) {
+      this.editModalFormRules()
+    } else {
+      this.modalFormRules.template_name[0].validator = null
+    }
   },
   methods: {
     // 穿梭框搜索

@@ -1,55 +1,53 @@
 <template>
   <div class="page">
     <div class="search-wrap">
-      <el-form>
-        <div class="clearfix">
-          <el-col :span="7">
-            <el-form-item label="模板名称："
-                          label-width="80px">
-              <el-tooltip class="tooltip-reset"
-                          effect="dark"
-                          :disabled="templateTipContent ? false:true"
-                          :content="templateTipContent"
-                          placement="top-start">
-                <el-cascader v-model="searchForm.template_guid"
-                             placeholder="请选择模板名称"
-                             popper-class="reset-casc"
-                             :options="tempalteOption"
-                             filterable
-                             clearable>
-                  <span slot-scope="{ data }">
-                    <el-tooltip effect="dark"
-                                :content="data.label"
-                                placement="left">
-                      <span>{{data.label}}</span>
-                    </el-tooltip>
-                  </span>
-                </el-cascader>
-              </el-tooltip>
-            </el-form-item>
-          </el-col>
-          <el-col :span="7">
-            <el-form-item label="有效性："
-                          label-width="80px">
-              <el-select v-model="searchForm.is_valid"
-                         clearable
-                         @clear="validClear"
-                         placeholder="请选择有效性">
-                <el-option v-for="item in effectOption"
-                           :key="item.value"
-                           :label="item.label"
-                           :value="item.value">
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="10">
-            <el-form-item class="search-btn">
-              <el-button type="primary"
-                         @click="queryHandel">查询</el-button>
-            </el-form-item>
-          </el-col>
-        </div>
+      <el-form class="demo-form-inline">
+        <el-col :span="7">
+          <el-form-item label="模板名称："
+                        label-width="80px">
+            <el-tooltip class="tooltip-reset"
+                        effect="dark"
+                        :disabled="templateTipContent ? false:true"
+                        :content="templateTipContent"
+                        placement="top-start">
+              <el-cascader v-model="searchForm.template_guid"
+                           placeholder="请选择模板名称"
+                           popper-class="reset-casc"
+                           :options="tempalteOption"
+                           filterable
+                           clearable>
+                <span slot-scope="{ data }">
+                  <el-tooltip effect="dark"
+                              :content="data.label"
+                              placement="left">
+                    <span>{{data.label}}</span>
+                  </el-tooltip>
+                </span>
+              </el-cascader>
+            </el-tooltip>
+          </el-form-item>
+        </el-col>
+        <el-col :span="7">
+          <el-form-item label="有效性："
+                        label-width="80px">
+            <el-select v-model="searchForm.is_valid"
+                       clearable
+                       @clear="validClear"
+                       placeholder="请选择有效性">
+              <el-option v-for="item in effectOption"
+                         :key="item.value"
+                         :label="item.label"
+                         :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="10">
+          <el-form-item class="search-btn">
+            <el-button type="primary"
+                       @click="queryHandel">查询</el-button>
+          </el-form-item>
+        </el-col>
       </el-form>
     </div>
     <div class="table-wrap">
@@ -247,31 +245,5 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-.search-wrap {
-  // width: 100%;
-  padding: 15px;
-  background-color: #fff;
-  .form-row {
-    margin-top: 15px;
-  }
-  .el-form-item {
-    margin-bottom: 0;
-  }
-  .search-btn {
-    display: flex;
-    justify-content: flex-end;
-  }
-}
-.table-wrap {
-  padding: 15px;
-  margin-top: 15px;
-  background-color: #fff;
-  .table-info {
-    margin-bottom: 20px;
-    h4 {
-      font-size: 20px;
-      // font-weight: bold;
-    }
-  }
-}
+@import "../../common/styles/page-table";
 </style>
