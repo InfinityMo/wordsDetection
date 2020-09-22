@@ -15,7 +15,6 @@
                       label-width="115px">
           <el-input v-model="modalForm.template_name"
                     :disabled="disabled"
-                    @blur="templateBlur"
                     placeholder="请输入模板名称"
                     maxlength=50
                     autocomplete="off">
@@ -110,7 +109,7 @@
 <script>
 import transferCom from './transferCom'
 import tableMixin from '@/mixins/dealTable'
-import { modalForm, modalFormRules } from './modalFormData'
+import { modalForm, modalFormRules, modalFormNext, modalFormNextRules } from './modalFormData'
 export default {
   components: { transferCom },
   mixins: [tableMixin],
@@ -148,8 +147,8 @@ export default {
       isNext: false, // 是否执行下一步
       modalForm: JSON.parse(JSON.stringify(modalForm)),
       modalFormRules: modalFormRules,
-      modalFormNext: JSON.parse(JSON.stringify(modalForm)),
-      modalFormNextRules: modalFormRules,
+      modalFormNext: JSON.parse(JSON.stringify(modalFormNext)),
+      modalFormNextRules: modalFormNextRules,
       shopOption: [],
       templateOptions: [{
         value: 0,
@@ -178,6 +177,7 @@ export default {
   },
   mounted () {
     this.nextId = this.addEditId
+    this.editModalFormRules()
   },
   methods: {
     // 穿梭框搜索
@@ -330,15 +330,22 @@ export default {
         }
       })
     },
-    templateBlur (e) {
-      const value = e.target.value
-      this.$request.post('/templatenamecheck', { template_name: value }).then(res => {
-        if (res.errorCode === 1) {
-          if (res.data) {
-            this.$message.warning('已存在相同的模板名称')
+    editModalFormRules () {
+      this.$nextTick(() => {
+        this.modalFormRules.template_name[0].validator = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入模板名称'))
+          } else {
+            this.$request.post('/templatenamecheck', { template_name: value }).then(res => {
+              if (res.errorCode === 1) {
+                if (res.data) {
+                  callback(new Error('已存在相同的模板名称，请重新输入'))
+                } else {
+                  callback()
+                }
+              }
+            })
           }
-        } else {
-
         }
       })
     }

@@ -19,8 +19,8 @@ export const modalFormRules = {
     { required: true, message: '请选择店铺归属', trigger: 'change' }
   ],
   shop_url: [
-    { required: true, message: '请填写店铺链接', trigger: 'blur' },
-    { pattern: /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/, message: '请填写正确的店铺链接！', trigger: 'blur' }
+    { required: true, trigger: 'blur' }
+    // { pattern: /[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+\.?/, message: '请填写正确的店铺链接！', trigger: 'blur' }
   ],
   select_brand: [
     { required: true, message: '请选择品牌', trigger: ['change', 'blur'] }

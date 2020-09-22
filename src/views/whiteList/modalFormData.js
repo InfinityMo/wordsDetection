@@ -6,7 +6,7 @@ export const modalForm = {
 
 export const modalFormRules = {
   template_name: [
-    { required: true, message: '请输入模板名称', trigger: 'blur' }
+    { required: true, trigger: 'blur' }
   ],
   select_word: [
     { required: true, message: '请选择违禁词', trigger: ['blur', 'change'] }
@@ -22,7 +22,7 @@ export const modalFormNextRules = {
     { required: true, message: '请选择店铺名称', trigger: 'change' }
   ],
   select_link: [
-    { required: true, message: '请选择违禁词', trigger: 'change' }
+    { required: false, message: '请选择链接', trigger: 'change' }
   ]
 }
 // // 链接模板

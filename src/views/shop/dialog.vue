@@ -79,7 +79,6 @@
                     prop="shop_url"
                     label-width="110px">
         <el-input v-model="modalForm.shop_url"
-                  @change="urlCheck"
                   placeholder="请输入店铺链接"
                   maxlength=100
                   autocomplete="off">
@@ -175,9 +174,11 @@ export default {
       this.disabled = false
     }
   },
+  mounted () {
+    this.editModalFormRules()
+  },
   methods: {
     urlCheck (value) {
-      // eslint-disable-next-line no-unused-vars
       let cutIndex = 0
       const formatVal = value.trim()
       const hkIndex = formatVal.indexOf('.hk')
@@ -189,12 +190,14 @@ export default {
         cutIndex = comIndex + 4
       }
       if (comIndex === -1 && hkIndex === -1) {
-        this.$message.error('请输入正确的店铺地址')
-        this.modalForm.shop_url = ''
-        return
+        // this.$message.error('请输入正确的店铺地址')
+        // this.modalForm.shop_url = ''
+        // return
+        return false
       }
       const cutStr = formatVal.substring(0, cutIndex)
       this.modalForm.shop_url = cutStr
+      return true
     },
     // 穿梭框搜索
     filterMethod (query, item) {
@@ -240,6 +243,21 @@ export default {
           this.$emit('modalConfirm', true)
         } else {
           this.$message.error('保存失败')
+        }
+      })
+    },
+    editModalFormRules () {
+      this.$nextTick(() => {
+        this.modalFormRules.shop_url[0].validator = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入店铺链接'))
+          } else {
+            if (this.urlCheck(value)) {
+              callback()
+            } else {
+              callback(new Error('请输入正确的店铺链接'))
+            }
+          }
         }
       })
     }
