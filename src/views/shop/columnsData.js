@@ -2,15 +2,13 @@ export const columnsData = (h, $this) => [{
   dataKey: '_index',
   title: '序号',
   align: 'center',
-  width: 60
+  width: 80
 }, {
   dataKey: 'shop_name',
-  title: '店铺名称',
-  width: 180
+  title: '店铺名称'
 }, {
   dataKey: 'shop_url',
-  title: '店铺链接',
-  width: 180
+  title: '店铺链接'
 }, {
   dataKey: 'seller_type',
   title: '店铺类型'
@@ -25,6 +23,7 @@ export const columnsData = (h, $this) => [{
 {
   dataKey: 'operate',
   title: '操作',
+  width: 120,
   render: (h, scoped) => {
     return (
       <div>

@@ -74,7 +74,7 @@ instance.interceptors.response.use(response => {
     return response.data // 过滤响应对象里多余的字段，只返回需要的data
   } else {
     Message.error(codeMessage['500'])
-    return Promise.reject(new Error())
+    return Promise.reject(new Error(codeMessage['500']))
   }
 }, error => {
   store.commit('setSpinning', false)

@@ -27,23 +27,24 @@
             </el-tooltip>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="9">
           <el-form-item label="检测时间："
                         label-width="80px">
             <el-date-picker class="form-date-picker"
                             v-model="searchForm.checkTime"
-                            value-format="yyyy-MM-dd"
-                            type="daterange"
+                            value-format="yyyy-MM-dd HH:mm"
+                            format="yyyy-MM-dd HH:mm"
+                            type="datetimerange"
                             align="right"
                             unlink-panels
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            range-separator="~"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
                             :picker-options="datePickerOptions">
             </el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="10">
+        <el-col :span="8">
           <el-form-item class="search-btn">
             <el-button type="primary"
                        @click="queryHandel">查询</el-button>
@@ -151,8 +152,9 @@ export default {
     },
     // 表格分页的变化
     tableChange (changeParams) {
-      this.paging.pageSize = changeParams.pageSize
-      this.paging.currentPage = changeParams.currentPage
+      this.PAGING.pageSize = changeParams.pageSize
+      this.PAGING.pageNum = changeParams.pageNum
+      this.getTableData()
     }
   }
 }

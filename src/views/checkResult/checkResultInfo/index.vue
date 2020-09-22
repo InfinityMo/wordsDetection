@@ -27,18 +27,19 @@
             </el-tooltip>
           </el-form-item>
         </el-col>
-        <el-col :span="7">
+        <el-col :span="8">
           <el-form-item label="检测时间："
-                        label-width="80px">
-            <el-date-picker v-model="searchForm.checkTime"
-                            class="form-date-picker"
-                            type="daterange"
+                        label-width="70px">
+            <el-date-picker class="form-date-picker"
+                            v-model="searchForm.checkTime"
+                            value-format="yyyy-MM-dd HH:mm"
+                            format="yyyy-MM-dd HH:mm"
+                            type="datetimerange"
                             align="right"
-                            value-format="yyyy-MM-dd"
                             unlink-panels
-                            range-separator="至"
-                            start-placeholder="开始日期"
-                            end-placeholder="结束日期"
+                            range-separator="~"
+                            start-placeholder="开始时间"
+                            end-placeholder="结束时间"
                             :picker-options="datePickerOptions">
             </el-date-picker>
           </el-form-item>
@@ -69,7 +70,7 @@
             </el-tooltip>
           </el-form-item>
         </el-col>
-        <el-col :span="3">
+        <el-col :span="2">
           <el-form-item class="search-btn">
             <el-button type="primary"
                        @click="queryHandel">查询</el-button>
@@ -180,6 +181,14 @@ export default {
         ...this.queryFrom
       }).then(res => {
         const resData = res.data.result || []
+        // 标题选中标红
+        resData.map((item, index) => {
+          const arr = item.prohibitedWord.split(',').join('|')
+          const reg = new RegExp(arr, 'g')
+          resData[index].linkTitle = item.linkTitle.replace(reg, ($1) => {
+            return `<span style="color:red;font-weight:bold;">${$1}</span>`
+          })
+        })
         this.tableData = resData
         this.PAGING.total = res.data.total
       })
@@ -207,12 +216,16 @@ export default {
     },
     // 表格分页的变化
     tableChange (changeParams) {
-      this.paging.pageSize = changeParams.pageSize
-      this.paging.currentPage = changeParams.currentPage
+      this.PAGING.pageSize = changeParams.pageSize
+      this.PAGING.pageNum = changeParams.pageNum
+      this.getTableData()
     }
   }
 }
 </script>
 <style lang="less" scoped>
 @import "../../../common/styles/page-table";
+/deep/.standard-table.el-table td {
+  padding: 13px 0;
+}
 </style>

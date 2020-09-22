@@ -4,16 +4,20 @@ export const columnsData = (h, $this) => [{
   width: 80
 }, {
   dataKey: 'shopName',
-  title: '店铺名称'
+  title: '店铺名称',
+  width: 150
 }, {
   dataKey: 'linkTitle',
+  isShowHtml: true,
   title: '标题'
 }, {
   dataKey: 'prohibitedWord',
-  title: '违禁词'
+  title: '违禁词',
+  width: 150
 },
 {
   dataKey: 'checkTime',
-  title: '检测时间'
+  title: '检测时间',
+  width: 150
 }
 ]

@@ -12,20 +12,29 @@
                    :row="scope.row"
                    :column="column">
           </operate>
-          <el-tooltip class="item"
-                      v-else
-                      effect="dark"
-                      placement="top">
-            <div class="tool-tip"
-                 slot="content">{{scope.row[column.dataKey]}}</div>
-            <div class="ell"
-                 v-if="column.align"
-                 :class="['text-'+column.align]">{{ scope.row[column.dataKey] }}</div>
-            <div class="ell"
-                 v-else>
-              {{ scope.row[column.dataKey] }}
-            </div>
-          </el-tooltip>
+          <template v-else>
+            <el-tooltip class="item"
+                        effect="dark"
+                        placement="top">
+              <div class="tool-tip"
+                   slot="content"
+                   v-if="column.isShowHtml"
+                   v-html="scope.row[column.dataKey]"></div>
+              <div class="tool-tip"
+                   slot="content"
+                   v-else>{{scope.row[column.dataKey]}}</div>
+              <div class="ell"
+                   v-if="column.align"
+                   :class="['text-'+column.align]">{{ scope.row[column.dataKey] }}</div>
+              <div class="ell"
+                   v-else>
+                <div v-if="column.isShowHtml"
+                     v-html="scope.row[column.dataKey]"></div>
+                <div v-else>{{ scope.row[column.dataKey] }}</div>
+              </div>
+            </el-tooltip>
+          </template>
+
         </template>
       </el-table-column>
     </el-table>
