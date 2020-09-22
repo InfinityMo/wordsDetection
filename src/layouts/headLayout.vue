@@ -3,10 +3,10 @@
     <div class="head-content flex-item-center">
       <h1>标题违禁词检测系统</h1>
       <!-- 用户信息 -->
-      <div class="flex-item-center user">
+      <!-- <div class="flex-item-center user">
         <div><img src="@/assets/img/custom/cat.jpg"></div>
         <p>欢迎您！Infinity</p>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
