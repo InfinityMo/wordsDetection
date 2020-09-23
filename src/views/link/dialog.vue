@@ -71,7 +71,7 @@
                     :content="brandTipContent"
                     placement="top-start">
           <el-cascader v-model="modalForm.brand_name"
-                       placeholder="请选择所属店铺"
+                       placeholder="请选择所属品牌"
                        popper-class="brand-cascader dialog-cascader"
                        :disabled="disabled"
                        :options="brandOption"

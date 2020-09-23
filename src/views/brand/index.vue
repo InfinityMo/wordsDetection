@@ -10,7 +10,7 @@
                         :content="tipContent"
                         placement="top-start">
               <el-cascader v-model="searchForm.RowGuid"
-                           placeholder="请选择店铺名称"
+                           placeholder="请选择品牌名称"
                            popper-class="reset-casc"
                            :options="selectOption"
                            filterable

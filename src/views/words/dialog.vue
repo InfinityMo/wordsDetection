@@ -12,6 +12,7 @@
                     prop="word"
                     label-width="115px">
         <el-input v-model="modalForm.word"
+                  placeholder="请输入违禁词"
                   :disabled="disabled"
                   maxlength=20
                   autocomplete="off">
