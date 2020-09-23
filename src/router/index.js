@@ -118,7 +118,7 @@ const routes = [
         path: 'checkResultInfo',
         name: 'checkResultInfo',
         meta: {
-          title: '检查结果页详情页'
+          title: '检查结果详情页'
         },
         component: () => import('@/views/checkResult/checkResultInfo/index.vue')
       }
