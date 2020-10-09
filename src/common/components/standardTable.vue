@@ -34,7 +34,6 @@
               </div>
             </el-tooltip>
           </template>
-
         </template>
       </el-table-column>
     </el-table>
