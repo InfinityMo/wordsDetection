@@ -1,7 +1,12 @@
 <template>
   <div class="head">
     <div class="head-content flex-item-center">
-      <h1>标题违禁词检测系统</h1>
+      <!-- <h1>标题违禁词检测系统</h1> -->
+      <div class="flex-item-center">
+        <img class="logo"
+             src="@/assets/img/system/logo.png">
+        <img src="@/assets/img/system/title.png">
+      </div>
       <!-- 用户信息 -->
       <!-- <div class="flex-item-center user">
         <div><img src="@/assets/img/custom/cat.jpg"></div>
@@ -27,7 +32,11 @@ export default {
   z-index: 2500;
   .head-content {
     height: 100%;
-    padding: 0 30px;
+    padding: 0 20px;
+    .logo {
+      height: 50px;
+      margin-right: 10px;
+    }
     h1 {
       font-size: 28px;
       font-weight: bold;
