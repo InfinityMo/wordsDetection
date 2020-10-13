@@ -103,7 +103,6 @@
       </span>
     </el-dialog>
   </div>
-
 </template>
 
 <script>
@@ -163,7 +162,15 @@ export default {
       shopLinkArr: [], // 店铺对应链接数据源
       select_link: [],
       disabled: false,
-      cacheSelectLink: '' // 缓存下拉框上次的选择记录
+      cacheSelectLink: '', // 缓存下拉框上次的选择记录
+      oldShopGuid: '' // 缓存下拉框上次的shopId
+    }
+  },
+  watch: {
+    'modalFormNext.shop_guid' (newVal, oldVal) {
+      if (oldVal && oldVal.length > 0) {
+        this.oldShopGuid = oldVal[0]
+      }
     }
   },
   async created () {
@@ -315,7 +322,7 @@ export default {
         if (valid) {
           const submitParams = {
             template_guid: this.nextId,
-            shop_guid: this.modalFormNext.shop_guid[0],
+            shop_guid: this.oldShopGuid,
             select_link: this.cacheSelectLink
           }
           this.$request.post('/templatelinkSave', submitParams).then(res => {
