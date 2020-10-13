@@ -34,7 +34,7 @@ export default {
     }
   },
   mounted () {
-    console.log(this.selectedlink)
+
   },
   methods: {
     // 穿梭框搜索

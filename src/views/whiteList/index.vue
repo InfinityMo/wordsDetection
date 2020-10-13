@@ -186,9 +186,13 @@ export default {
       this.getSelects()
     },
     // moadl关闭
-    modalCancel () {
+    modalCancel (cancel, nextCancel) {
       this.modalShow = false
       this.wordsArr = []
+      // 当执行了下一步时关闭刷新列表
+      if (nextCancel) {
+        this.getTableData()
+      }
     },
     switchChange (scoped) {
       const { row } = scoped

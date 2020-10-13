@@ -214,7 +214,7 @@ export default {
       this.saveTempalte(true)
     },
     modalCancel () {
-      this.$emit('modalCancel', false)
+      this.isNext ? this.$emit('modalCancel', false, true) : this.$emit('modalCancel', false, false)
     },
     // 保存模板
     saveTempalte (toNext) {
