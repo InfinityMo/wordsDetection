@@ -18,6 +18,16 @@ export const columnsData = (h, $this) => [{
 {
   dataKey: 'checkTime',
   title: '检测时间',
-  width: 150
-}
-]
+  width: 140
+}, {
+  dataKey: 'operate',
+  title: '操作',
+  width: 80,
+  render: (h, scoped) => {
+    return (
+      <div>
+        <el-button type="text" onClick={() => $this.viewHandle(scoped)}>查看</el-button>
+      </div>
+    )
+  }
+}]

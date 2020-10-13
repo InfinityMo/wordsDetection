@@ -12,6 +12,7 @@
                     label-width="120px">
         <el-input v-model="modalForm.brand_name"
                   placeholder="请输入品牌名称"
+                  :disabled="inputDisabled"
                   maxlength=50
                   @input="valueChnage"
                   autocomplete="off">
@@ -93,6 +94,7 @@ export default {
   data () {
     return {
       tipContent: '',
+      inputDisabled: false,
       disabled: true,
       selectOption: [],
       copySelectOption: [],
@@ -120,6 +122,7 @@ export default {
   created () {
     this.initSelectData().then(res => {
       if (this.addEditId) {
+        this.inputDisabled = true
         this.disabled = false
         this.getFormData()
       } else {

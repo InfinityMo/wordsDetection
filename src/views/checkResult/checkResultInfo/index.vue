@@ -214,6 +214,10 @@ export default {
       }
       this.getTableData()
     },
+    viewHandle (scoped) {
+      const { row } = scoped
+      window.open(row.linkUrl)
+    },
     // 表格分页的变化
     tableChange (changeParams) {
       this.PAGING.pageSize = changeParams.pageSize
