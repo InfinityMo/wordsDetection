@@ -229,6 +229,7 @@ export default {
         link_row_guid: this.searchForm.link_row_guid[0] || '',
         brand_guid: this.searchForm.brand_guid[0] || ''
       }
+      this.PAGING.pageNum = 1
       this.getTableData()
     },
     // 表格分页的变化
